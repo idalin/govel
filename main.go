@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"time"
 
-	"govel/controllers"
+	"github.com/idalin/govel/controllers"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"

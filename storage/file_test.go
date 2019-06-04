@@ -3,7 +3,7 @@ package storage
 import (
 	"encoding/json"
 	"fmt"
-	"govel/models"
+	"github.com/idalin/govel/models"
 	"io/ioutil"
 	"log"
 	"testing"

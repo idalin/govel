@@ -3,7 +3,7 @@ package models
 import (
 	"errors"
 	"fmt"
-	"govel/utils"
+	"github.com/idalin/govel/utils"
 	"net/url"
 	"os"
 	"path/filepath"

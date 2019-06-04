@@ -1,0 +1,10 @@
+.vscode/*
+book_cache/*
+*/moc*
+*/rcc*
+*/deploy
+main
+test.http
+bs.json
+bs_test.json
+54good.json

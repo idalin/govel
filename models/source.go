@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"govel/utils"
+	"github.com/idalin/govel/utils"
 	"io"
 	"log"
 	"net/url"

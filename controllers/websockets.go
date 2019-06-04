@@ -3,7 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"govel/models"
+	"github.com/idalin/govel/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

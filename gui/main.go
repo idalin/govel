@@ -1,7 +1,7 @@
 package main
 
 import (
-	"govel/models"
+	"github.com/idalin/govel/models"
 	"os"
 
 	"github.com/therecipe/qt/core"

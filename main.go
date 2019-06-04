@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"govel/models"
+	"github.com/idalin/govel/models"
 	"log"
 	"os"
 	"os/signal"

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"govel/models"
+	"github.com/idalin/govel/models"
 	"io/ioutil"
 	"os"
 	"path/filepath"

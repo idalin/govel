@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"govel/models"
+	"github.com/idalin/govel/models"
 
 	"github.com/therecipe/qt/core"
 )

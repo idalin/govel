@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"govel/models"
+	"github.com/idalin/govel/models"
 )
 
 type Storage interface {

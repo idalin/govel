@@ -1,17 +1,23 @@
 package main
 
 import (
-	"github.com/idalin/govel/models"
+	"fmt"
 	"os"
 
 	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/gui"
 	"github.com/therecipe/qt/qml"
 	"github.com/therecipe/qt/quickcontrols2"
+
+	"github.com/idalin/govel/models"
 )
 
 func main() {
 	models.InitBS("../bs.json")
+	err := os.Setenv("QT_IM_MODULE", "qtvirtualkeyboard")
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 
 	// enable high dpi scaling
 	// useful for devices with high pixel density displays

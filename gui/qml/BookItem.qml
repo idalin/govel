@@ -1,10 +1,13 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.0
+import QtQuick.Window 2.2
+
 
 Rectangle{
     id:bookItem
     width: parent.width
-    height:190
+    height:48*root.dpi
     // anchors.fill: parent    
     anchors.margins: 10
     property alias authorName: authorText.text
@@ -18,14 +21,19 @@ Rectangle{
 
     Row {
         width: parent.width
-        Image{
-            id: coverImg      
-            asynchronous: true     
+        Rectangle{
             width: parent.width/4
             height: width/4*5
-            anchors.margins: 10
-            source: source?source:"qrc:/images/drawer.png"
+            radius: 20
+            Image{
+                id: coverImg      
+                asynchronous: true                    
+                anchors.fill: parent                
+                anchors.margins: 10
+                source: source?source:"qrc:/images/drawer.png"
+            }
         }
+        
         Column {                                  
             leftPadding: 10  
             spacing: 10         
@@ -51,16 +59,12 @@ Rectangle{
         }
         
     }
-    Rectangle{
-        height:1
-        width: parent.width
-        color: "black"
-        
-    }
+    
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            console.log(title+" clicked!");
+            console.log(title+" clicked!"+" root.y:"+root.y+" root.height:"+root.height+" popup.y:"+bookPopup.y);
+            bookPopup.open()
             
             // bookItem.clicked()
         }
@@ -72,5 +76,38 @@ Rectangle{
         }else{
             coverImg.source="qrc:/images/drawer.png"
         }
-    }      
+    } 
+    Rectangle {
+        color: "black"      
+        width: parent.width
+        height:1
+        anchors.top: parent.bottom        
+    } 
+    Popup {
+        id:bookPopup
+        width: root.width/3*2
+        height: root.height/2
+        // anchors.centerIn: Overlay.overlay
+        x: Math.round((parent.width - width) / 2)
+        y: Math.round((Screen.desktopAvailableHeight - height) / 2)
+        // Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+        // x:(root.width-width)/2
+        // y:0
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent
+
+        Rectangle
+        {
+//            width: 400
+//            height: 300
+            anchors.fill: parent
+            Text {
+                id: mytext
+                font.pixelSize: 24
+                text: qsTr("Popup 内容显示模块")
+            }
+        }
+    }
+   
 }

@@ -3,13 +3,14 @@ package models
 import (
 	"errors"
 	"fmt"
-	"github.com/idalin/govel/utils"
 	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+
+	"github.com/idalin/govel/utils"
 )
 
 type Book struct {
@@ -87,8 +88,7 @@ func (b *Book) getBookPage() (*goquery.Document, error) {
 			doc, err := goquery.NewDocumentFromReader(p)
 			if err == nil {
 				b.Page = doc
-
-				return b.Page, err
+				return b.Page, nil
 			}
 		}
 		return nil, err
@@ -139,7 +139,7 @@ func (b *Book) GetTitle() string {
 			b.Title = title
 		}
 	} else {
-		fmt.Printf("get title error:%s\n", err.Error()) // for debug
+		log.DebugF("get title error:%s\n", err.Error())
 	}
 	return b.Title
 }
@@ -155,7 +155,7 @@ func (b *Book) GetIntroduce() string {
 			b.Introduce = intro
 		}
 	} else {
-		fmt.Printf("get introduce error:%s\n", err.Error()) // for debug
+		log.DebugF("get introduce error:%s\n", err.Error())
 	}
 	return b.Introduce
 }
@@ -170,7 +170,7 @@ func (b *Book) GetAuthor() string {
 				b.Author = intro
 			}
 		} else {
-			fmt.Printf("get author error:%s\n", err.Error()) // for debug
+			log.DebugF("get author error:%s\n", err.Error())
 		}
 	}
 	return b.Author

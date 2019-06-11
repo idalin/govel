@@ -3,10 +3,11 @@ package models
 import (
 	"errors"
 	"fmt"
-	"github.com/idalin/govel/utils"
 	"net/url"
 
 	"github.com/PuerkitoBio/goquery"
+
+	"github.com/idalin/govel/utils"
 )
 
 type Chapter struct {
@@ -91,7 +92,7 @@ func (c *Chapter) GetContent() string {
 			c.Content = content
 		}
 	} else {
-		fmt.Printf("get content error:%s\n", err.Error()) // for debug
+		log.DebugF("get content error:%s\n", err.Error())
 	}
 	return c.Content
 }

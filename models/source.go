@@ -4,21 +4,28 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/idalin/govel/utils"
 	"io"
-	"log"
+	"io/ioutil"
+	// "log"
 	"net/url"
 	"sort"
 	"strings"
-	"io/ioutil"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/apsdehal/go-logger"
 	"github.com/patrickmn/go-cache"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
+
+	"github.com/idalin/govel/utils"
 )
 
 var BSCache *cache.Cache = cache.New(0, 0)
+var log *logger.Logger
+
+func init() {
+	log = utils.GetLogger()
+}
 
 type SearchOutput map[string][]*Book
 
@@ -27,11 +34,11 @@ func InitBS(fileName string) {
 	bookSource, err := ioutil.ReadFile(fileName)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err.Error())
 	}
 	err = json.Unmarshal(bookSource, &bs)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err.Error())
 	}
 
 	for _, b := range bs {
@@ -153,12 +160,12 @@ func (b *BookSource) SearchBook(title string) []*Book {
 		params := strings.Replace(data, "=searchKey", fmt.Sprintf("=%s", url.QueryEscape(title)), -1)
 		p, err = utils.PostPage(strings.Split(searchUrl, "@")[0], params)
 	} else {
-		fmt.Println(searchUrl)
+		log.Debug(searchUrl)
 		p, err = utils.GetPage(searchUrl, b.HTTPUserAgent)
 	}
 
 	if err != nil {
-		log.Println(err)
+		log.ErrorF("searching book error:%s\n", err.Error())
 		return nil
 	}
 	doc, err := goquery.NewDocumentFromReader(p)
@@ -221,7 +228,7 @@ func (b *BookSource) extractSearchResult(doc *goquery.Document) []*Book {
 		})
 
 	} else {
-		fmt.Println(str)
+		log.ErrorF("No search result found. string:%s\n", str)
 	}
 
 	return srList
@@ -242,7 +249,7 @@ func SearchBooks(title string) SearchOutput {
 						}
 					}
 				} else {
-					fmt.Println("not book source.")
+					log.ErrorF("not book source.")
 				}
 			}
 		}
@@ -261,7 +268,7 @@ func SearchBooks(title string) SearchOutput {
 	for _, key := range SortSearchOutput(result) {
 		if key != "" {
 			resultJson, _ := json.MarshalIndent(result[key], "", "    ")
-			fmt.Printf("%s:\n %s\n", key, resultJson)
+			log.DebugF("%s:\n %s\n", key, resultJson)
 		}
 	}
 	return result

@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"crypto/tls"
 	"io"
-	"log"
+	// "log"
 	"net/http"
 	"strings"
 	"time"
@@ -19,12 +19,11 @@ func GetPage(url, ua string) (io.Reader, error) {
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
-	client := &http.Client{Transport: tr, Timeout: 5 * time.Second}
+	client := &http.Client{Transport: tr, Timeout: 10 * time.Second}
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		// log.Fatalln(err)
-		log.Println(err)
+		log.DebugF("GetPage error:%s\n", err.Error())
 		return nil, err
 
 	}
@@ -36,8 +35,7 @@ func GetPage(url, ua string) (io.Reader, error) {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		// log.Fatalln(err)
-		log.Println(err)
+		log.DebugF("GetPage error:%s\n", err.Error())
 		return nil, err
 	}
 
@@ -49,8 +47,7 @@ func GetPage(url, ua string) (io.Reader, error) {
 func PostPage(url, key string) (io.Reader, error) {
 	res, err := http.Post(url, "application/x-www-form-urlencoded", strings.NewReader(key))
 	if err != nil {
-		// log.Fatal(err)
-		log.Println(err)
+		log.DebugF("PostPage error:%s\n", err.Error())
 		return nil, err
 	}
 	return DecodeHTMLBody(res.Body)

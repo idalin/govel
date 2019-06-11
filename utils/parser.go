@@ -12,18 +12,18 @@ import (
 )
 
 func ParseRules(doc interface{}, rule string) (*goquery.Selection, string) {
-	// fmt.Printf("parsing rules:%s\n", rule)
+	// log.Debugf("parsing rules:%s\n", rule)
 	var sel *goquery.Selection
 	var result string
 	var exclude = make([]string, 0)
 
 	if strings.HasPrefix(rule, "@JSon") {
-		fmt.Println("json result. not implemented.")
+		log.Error("json result. not implemented.")
 		return nil, ""
 	}
 
 	if strings.HasPrefix(rule, "@css") {
-		fmt.Println("jsoup selector.not implemented.")
+		log.Error("jsoup selector.not implemented.")
 		return nil, ""
 	}
 	rules := strings.Split(rule, "@")
@@ -70,6 +70,7 @@ func ParseRules(doc interface{}, rule string) (*goquery.Selection, string) {
 			}
 			if result != "" {
 				return nil, strings.TrimSpace(result)
+				// return nil, result
 			}
 		default:
 			sel = sel.Find(ruleStr)

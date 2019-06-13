@@ -213,14 +213,13 @@ func (b *BookSource) extractSearchResult(doc *goquery.Document) []*Book {
 					noteURL = fmt.Sprintf("%s%s", b.BookSourceURL, noteURL)
 				}
 				sr := &Book{
-					BookSourceSite: b.BookSourceURL,
-					Title:          title,
-					Author:         author,
-					Kind:           kind,
-					CoverURL:       cover,
-					LastChapter:    lastChapter,
-					NoteURL:        noteURL,
-					BookURL:        url,
+					Tag:         b.BookSourceURL,
+					Name:        title,
+					Author:      author,
+					Kind:        kind,
+					CoverURL:    cover,
+					LastChapter: lastChapter,
+					NoteURL:     noteURL,
 				}
 				srList = append(srList, sr)
 
@@ -257,12 +256,12 @@ func SearchBooks(title string) SearchOutput {
 	}()
 
 	for i := range c {
-		if _, ok := result[i.Title]; !ok {
-			result[i.Title] = []*Book{i}
+		if _, ok := result[i.Name]; !ok {
+			result[i.Name] = []*Book{i}
 			// result[title] = append(result[title], sr)
 		} else {
 			// fmt.Println("exists, append.")
-			result[i.Title] = append(result[i.Title], i)
+			result[i.Name] = append(result[i.Name], i)
 		}
 	}
 	for _, key := range SortSearchOutput(result) {

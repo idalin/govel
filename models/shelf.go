@@ -56,36 +56,23 @@ type BookShelf struct {
 type Items []*ShelfItem
 
 type ShelfItem struct {
-	AllowUpdate      bool      `json:"allowUpdate"`      // 是否允许更新
-	BookInfoBean     *BookInfo `json:"bookInfoBean"`     // 书籍信息
-	ChapterListSize  int       `json:"chapterListSize"`  // 章节数
-	DurChapter       int       `json:"durChapter"`       // 在读章节index
-	DurChapterName   string    `json:"durChapterName"`   // 在读章节名字
-	DurChapterPage   int       `json:"durChapterPage"`   // 在读章节页数
-	FinalDate        UnixTime  `json:"finalDate"`        // 最后阅读时间？
-	FinalRefreshDate UnixTime  `json:"finalRefreshData"` // 最后更新时间 "阅读"有typo,这里应该是 finalRefreshDate
-	Group            int       `json:"group"`            // 分组
-	HasUpdate        bool      `json:"hasUpdate"`
-	IsLoading        bool      `json:"isLoading"`
-	LastChapterName  string    `json:"lastChapterName"`
-	NewChapters      int       `json:"newChapters"`
-	NoteURL          string    `json:"noteUrl"`
-	SerialNumber     int       `json:"serialNumber"`
-	Tag              string    `json:"tag"`
-	UseReplaceRule   bool      `json:"useReplaceRule"`
-}
-
-type BookInfo struct {
-	Author           string        `json:"author"`
-	BookmarkList     []interface{} `json:"bookmarkList"`
-	ChapterURL       string        `json:"chapterUrl"`
-	CoverURL         string        `json:"coverUrl"`
-	FinalRefreshData UnixTime      `json:"finalRefreshData"`
-	Introduce        string        `json:"introduce"`
-	Name             string        `json:"name"`
-	NoteURL          string        `json:"noteUrl"`
-	Origin           string        `json:"origin"`
-	Tag              string        `json:"tag"`
+	AllowUpdate      bool     `json:"allowUpdate"`      // 是否允许更新
+	BookInfoBean     *Book    `json:"bookInfoBean"`     // 书籍信息
+	ChapterListSize  int      `json:"chapterListSize"`  // 章节数
+	DurChapter       int      `json:"durChapter"`       // 在读章节index
+	DurChapterName   string   `json:"durChapterName"`   // 在读章节名字
+	DurChapterPage   int      `json:"durChapterPage"`   // 在读章节页数
+	FinalDate        UnixTime `json:"finalDate"`        // 最后阅读时间？
+	FinalRefreshDate UnixTime `json:"finalRefreshData"` // 最后更新时间 "阅读"有typo,这里应该是 finalRefreshDate
+	Group            int      `json:"group"`            // 分组
+	HasUpdate        bool     `json:"hasUpdate"`
+	IsLoading        bool     `json:"isLoading"`
+	LastChapterName  string   `json:"lastChapterName"`
+	NewChapters      int      `json:"newChapters"`
+	NoteURL          string   `json:"noteUrl"`
+	SerialNumber     int      `json:"serialNumber"`
+	Tag              string   `json:"tag"`
+	UseReplaceRule   bool     `json:"useReplaceRule"`
 }
 
 func (s Items) Len() int {

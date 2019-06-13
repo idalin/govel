@@ -14,37 +14,42 @@ import (
 )
 
 type Book struct {
-	BookSourceSite string            `json:"source"`
-	Title          string            `json:"name"`
-	Author         string            `json:"author"`
-	BookURL        string            `json:"book_url"`
-	CoverURL       string            `json:"cover_url"`
-	Kind           string            `json:"kind"`
-	LastChapter    string            `json:"last_chapter"`
-	NoteURL        string            `json:"note_url"`
-	Introduce      string            `json:"intro"`
-	ChapterList    []*Chapter        `json:"-"`
-	BookSourceInst *BookSource       `json:"-"`
-	Page           *goquery.Document `json:"-"`
+	Tag          string        `json:"tag"`
+	Origin       string        `json:"origin"`
+	Name         string        `json:"name"`
+	Author       string        `json:"author"`
+	BookmarkList []interface{} `json:"bookmarkList"`
+	ChapterURL   string        `json:"chapterUrl"`
+	// BookURL        string            `json:"book_url"`
+	CoverURL         string            `json:"coverUrl"`
+	Kind             string            `json:"kind"`
+	LastChapter      string            `json:"last_chapter"`
+	FinalRefreshData UnixTime          `json:"finalRefreshData"`
+	NoteURL          string            `json:"noteUrl"`
+	Introduce        string            `json:"introduce"`
+	ChapterList      []*Chapter        `json:"-"`
+	BookSourceInst   *BookSource       `json:"-"`
+	Page             *goquery.Document `json:"-"`
 }
 
 func (b Book) String() string {
-	return fmt.Sprintf("%s( %s )", b.Title, b.BookURL)
+	return fmt.Sprintf("%s( %s )", b.Name, b.NoteURL)
 }
 
 func (b *Book) GetBookSource() *BookSource {
 	if b.BookSourceInst != nil {
 		return b.BookSourceInst
 	}
-	if b.BookSourceSite == "" {
-		if b.BookURL == "" {
+	if b.Tag == "" {
+		if b.NoteURL == "" {
 			return nil
 		}
-		b.BookSourceSite = utils.GetHostByURL(b.BookURL)
+		b.Tag = utils.GetHostByURL(b.NoteURL)
 	}
-	if bsItem, ok := BSCache.Get(b.BookSourceSite); ok {
+	if bsItem, ok := BSCache.Get(b.Tag); ok {
 		if bs, ok := bsItem.(BookSource); ok {
 			b.BookSourceInst = &bs
+			b.Origin = bs.BookSourceName
 			return &bs
 		} else {
 			return nil
@@ -61,8 +66,8 @@ func (b *Book) FromURL(bookURL string) error {
 	if err != nil {
 		return err
 	}
-	b.BookURL = bookURL
-	b.BookSourceSite = utils.GetHostByURL(b.BookURL)
+	b.NoteURL = bookURL
+	b.Tag = utils.GetHostByURL(b.NoteURL)
 	b.GetAuthor()
 	b.GetIntroduce()
 	return nil
@@ -82,8 +87,8 @@ func (b *Book) getBookPage() (*goquery.Document, error) {
 		return b.Page, nil
 	}
 	bs := b.GetBookSource()
-	if b.BookURL != "" && bs != nil {
-		p, err := utils.GetPage(b.BookURL, b.GetBookSource().HTTPUserAgent)
+	if b.NoteURL != "" && bs != nil {
+		p, err := utils.GetPage(b.NoteURL, b.GetBookSource().HTTPUserAgent)
 		if err == nil {
 			doc, err := goquery.NewDocumentFromReader(p)
 			if err == nil {
@@ -96,15 +101,50 @@ func (b *Book) getBookPage() (*goquery.Document, error) {
 	return nil, errors.New("can't get book page.")
 }
 
+func (b *Book) GetChapterURL() string {
+	if b.ChapterURL != "" {
+		return b.ChapterURL
+	}
+	doc, err := b.getBookPage()
+	if err == nil {
+		_, chapterURL := utils.ParseRules(doc, b.BookSourceInst.RuleChapterURL)
+		if chapterURL != "" {
+			log.DebugF("chapter url is: %s", chapterURL)
+			b.ChapterURL = chapterURL
+			return b.ChapterURL
+		}
+	} else {
+		log.DebugF("get chapterURL error:%s\n", err.Error())
+	}
+	return b.NoteURL
+}
+
 func (b *Book) GetChapterList() []*Chapter {
 	b.UpdateChapterList(len(b.ChapterList))
 	return b.ChapterList
 }
 
 func (b *Book) UpdateChapterList(startFrom int) error {
-	doc, err := b.getBookPage()
+	var doc *goquery.Document
+	var err error
+	bs := b.GetBookSource()
+	// if b.ChapterURL != "" && bs != nil {
+	p, err := utils.GetPage(b.GetChapterURL(), b.GetBookSource().HTTPUserAgent)
+	log.DebugF("%s chapterlist url is:%s .", b.Name, b.ChapterURL)
 	if err != nil {
-		return err
+		log.ErrorF("error while getting chapter list page: %s", err.Error())
+	}
+	doc, err = goquery.NewDocumentFromReader(p)
+	if err != nil {
+		log.ErrorF("error while parsing chapter list page to goquery: %s", err.Error())
+	}
+	// }
+	if doc == nil {
+		log.DebugF("%s no chapterurl found.got by bookurl.", bs.BookSourceName)
+		doc, err = b.getBookPage()
+		if err != nil {
+			return err
+		}
 	}
 	sel, _ := utils.ParseRules(doc, b.BookSourceInst.RuleChapterList)
 	if sel != nil {
@@ -128,20 +168,20 @@ func (b *Book) UpdateChapterList(startFrom int) error {
 	return nil
 }
 
-func (b *Book) GetTitle() string {
-	if b.Title != "" {
-		return b.Title
+func (b *Book) GetName() string {
+	if b.Name != "" {
+		return b.Name
 	}
 	doc, err := b.getBookPage()
 	if err == nil {
 		_, title := utils.ParseRules(doc, b.BookSourceInst.RuleBookName)
 		if title != "" {
-			b.Title = title
+			b.Name = title
 		}
 	} else {
 		log.DebugF("get title error:%s\n", err.Error())
 	}
-	return b.Title
+	return b.Name
 }
 
 func (b *Book) GetIntroduce() string {

@@ -44,9 +44,9 @@ func TestSource(t *testing.T) {
 func TestBook(t *testing.T) {
 	book := Book{}
 	log.Info("===========Book Start===========")
-	book.FromURL("http://www.wzzw.la/33/33705/")
+	book.FromURL("https://www.zwdu.com/book/32642/")
 	log.InfoF("%v\n", book.GetChapterList())
-	log.InfoF("%v\n", book.GetTitle())
+	log.InfoF("%v\n", book.GetName())
 	log.InfoF("%v\n", book.GetIntroduce())
 	log.InfoF("%v\n", book.GetAuthor())
 	log.Info("===========Book End=============")
@@ -54,6 +54,6 @@ func TestBook(t *testing.T) {
 
 func TestChapter(t *testing.T) {
 	c := Chapter{}
-	c.FromURL("http://www.b5200.net/96_96421/154221199.html")
+	c.FromURL("https://www.zwdu.com/book/32642/16771698.html")
 	log.Info(c.GetContent())
 }

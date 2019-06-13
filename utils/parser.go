@@ -64,7 +64,6 @@ func ParseRules(doc interface{}, rule string) (*goquery.Selection, string) {
 				}
 			case "src", "href":
 				result, _ = sel.Attr(ruleStr)
-				// result = strings.TrimSpace(result)
 			default:
 				sel = sel.Find(ruleStr)
 			}

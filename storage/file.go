@@ -56,12 +56,12 @@ func (f *FileStorage) GetBookDir(book *models.Book) (string, error) {
 	if f.BasePath == "" {
 		return "", errors.New("No book store path.")
 	}
-	if book.BookSourceSite == "" || book.GetTitle() == "" {
+	if book.Tag == "" || book.GetName() == "" {
 		return "", errors.New("book name or book source null.")
 	}
 	re := regexp.MustCompile("[./:]")
-	site := re.ReplaceAllString(book.BookSourceSite, "")
-	bookDirName := fmt.Sprintf("%s-%s", book.GetTitle(), site)
+	site := re.ReplaceAllString(book.Tag, "")
+	bookDirName := fmt.Sprintf("%s-%s", book.GetName(), site)
 	if !utils.IsExist(f.BasePath) {
 		return "", errors.New(fmt.Sprintf("book cache path: %s not exists.", f.BasePath))
 	}
@@ -84,7 +84,7 @@ func (f *FileStorage) GetBook(book *models.Book) error {
 	}
 	// var b models.Book
 	err = json.Unmarshal(bookInfo, &book)
-	log.Debug(book.Title)
+	log.Debug(book.Name)
 	log.Debug(book.Introduce)
 	chapters, err := ioutil.ReadDir(bookDir)
 	if err != nil {

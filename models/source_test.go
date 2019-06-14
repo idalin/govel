@@ -35,7 +35,7 @@ func TestSource(t *testing.T) {
 			bs, ok := b.(BookSource)
 			if ok {
 				log.DebugF("searching with %v\n", bs)
-				log.InfoF("result of search:  %v\n", bs.SearchBook("明朝败家子"))
+				log.InfoF("result of search:  %v\n", bs.SearchBook("第一序列"))
 			}
 		}
 	}

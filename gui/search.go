@@ -2,26 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/idalin/govel/models"
 
 	"github.com/therecipe/qt/core"
-)
 
-const (
-	Name = int(core.Qt__UserRole) + 1<<iota
-	Author
-	Book_url
-	Cover_url
-	Kind
-	Last_chapter
-	Note_url
-	Intro
-	Book_source
+	"github.com/idalin/govel/models"
 )
 
 func init() {
 	SearchListModel_QmlRegisterType2("CustomQmlTypes", 1, 0, "SearchListModel")
-	BookItem_QRegisterMetaType()
 }
 
 type SearchListModel struct {
@@ -29,9 +17,9 @@ type SearchListModel struct {
 
 	_ func()                   `constructor:"init"`
 	_ map[int]*core.QByteArray `property:"roles"`
-	_ []*BookItem              `property:"books"`
+	_ []*Book                  `property:"books"`
 
-	_ func(*BookItem)                      `slot:"addBook"`
+	_ func(*Book)                          `slot:"addBook"`
 	_ func(row int, key int, value string) `slot:"editBook"`
 
 	// _ func()                                  `signal:"remove,auto"`
@@ -41,31 +29,19 @@ type SearchListModel struct {
 	// _ func()           `signal:"clear,auto"`
 }
 
-type BookItem struct {
-	core.QObject
-
-	_ string `property:"name"`
-	_ string `property:"author"`
-	_ string `property:"book_url"`
-	_ string `property:"cover_url"`
-	_ string `property:"kind"`
-	_ string `property:"last_chapter"`
-	_ string `property:"note_url"`
-	_ string `property:"intro"`
-	_ string `property:"book_source"`
-}
-
 func (s *SearchListModel) init() {
 	s.SetRoles(map[int]*core.QByteArray{
-		Name:         core.NewQByteArray2("name", len("name")),
-		Author:       core.NewQByteArray2("author", len("author")),
-		Book_url:     core.NewQByteArray2("book_url", len("book_url")),
-		Cover_url:    core.NewQByteArray2("cover_url", len("cover_url")),
-		Kind:         core.NewQByteArray2("kind", len("kind")),
-		Last_chapter: core.NewQByteArray2("last_chapter", len("last_chapter")),
-		Note_url:     core.NewQByteArray2("note_url", len("note_url")),
-		Intro:        core.NewQByteArray2("intro", len("intro")),
-		Book_source:  core.NewQByteArray2("book_source", len("book_source")),
+		Name:        core.NewQByteArray2("name", len("name")),
+		Author:      core.NewQByteArray2("author", len("author")),
+		NoteURL:     core.NewQByteArray2("noteUrl", len("noteUrl")),
+		CoverURL:    core.NewQByteArray2("coverUrl", len("CoverUrl")),
+		ChapterURL:  core.NewQByteArray2("chapterUrl", len("chapterUrl")),
+		Tag:         core.NewQByteArray2("tag", len("tag")),
+		Origin:      core.NewQByteArray2("origin", len("origin")),
+		Kind:        core.NewQByteArray2("kind", len("kind")),
+		LastChapter: core.NewQByteArray2("lastChapter", len("lastChapter")),
+		Introduce:   core.NewQByteArray2("introduce", len("introduce")),
+		ModelData:   core.NewQByteArray2("modelData", len("modelData")),
 	})
 	s.ConnectData(s.data)
 
@@ -93,48 +69,57 @@ func (s *SearchListModel) data(index *core.QModelIndex, role int) *core.QVariant
 			// fmt.Println("data Name called.")
 			return core.NewQVariant14(b.Name())
 		}
-
 	case Author:
 		{
 			// fmt.Println("data Author called.")
 			return core.NewQVariant14(b.Author())
 		}
-	case Book_url:
+	case NoteURL:
 		{
-			// fmt.Println("data BookURL called.")
-			return core.NewQVariant14(b.Book_url())
+			// fmt.Println("data NoteURL called.")
+			return core.NewQVariant14(b.NoteUrl())
 		}
-	case Cover_url:
+	case CoverURL:
 		{
 			// fmt.Println("data Cover_url called.")
-			return core.NewQVariant14(b.Cover_url())
+			return core.NewQVariant14(b.CoverUrl())
+		}
+	case ChapterURL:
+		{
+			// fmt.Println("data Cover_url called.")
+			return core.NewQVariant14(b.ChapterUrl())
+		}
+	case Tag:
+		{
+			// fmt.Println("data Cover_url called.")
+			return core.NewQVariant14(b.Tag())
+		}
+	case Origin:
+		{
+			// fmt.Println("data Cover_url called.")
+			return core.NewQVariant14(b.Origin())
 		}
 	case Kind:
 		{
 			// fmt.Println("data Kind called.")
 			return core.NewQVariant14(b.Kind())
 		}
-	case Last_chapter:
+	case LastChapter:
 		{
 			// fmt.Println("data LastChapter called.")
-			return core.NewQVariant14(b.Last_chapter())
-		}
-	case Note_url:
-		{
-			// fmt.Println("data NoteURL called.")
-			return core.NewQVariant14(b.Note_url())
-		}
-	case Intro:
-		{
-			// fmt.Println("data Intro called.")
-			return core.NewQVariant14(b.Intro())
-		}
-	case Book_source:
-		{
-			// fmt.Println("data BookSource called.")
-			return core.NewQVariant14(b.Book_source())
+			return core.NewQVariant14(b.LastChapter())
 		}
 
+	case Introduce:
+		{
+			// fmt.Println("data Intro called.")
+			return core.NewQVariant14(b.Introduce())
+		}
+	case ModelData:
+		{
+			fmt.Println("data modelData called.")
+			return core.NewQVariant1(b)
+		}
 	default:
 		{
 			return core.NewQVariant()
@@ -142,12 +127,6 @@ func (s *SearchListModel) data(index *core.QModelIndex, role int) *core.QVariant
 	}
 }
 
-// func (s *SearchListModel) clear() {
-// 	// s.SetBooks()
-// 	s.BeginRemoveRows(core.NewQModelIndex(), row, row)
-// 	s.SetBooks(append())
-// 	s.EndRemoveRows()
-// }
 func (s *SearchListModel) doSearch(key string) {
 	if key == "" {
 		return
@@ -173,7 +152,7 @@ func (s *SearchListModel) rowCount(*core.QModelIndex) int {
 	return len(s.Books())
 }
 
-func (s *SearchListModel) addBook(book *BookItem) {
+func (s *SearchListModel) addBook(book *Book) {
 	s.BeginInsertRows(core.NewQModelIndex(), len(s.Books()), len(s.Books()))
 	s.SetBooks(append(s.Books(), book))
 	s.EndInsertRows()
@@ -182,10 +161,10 @@ func (s *SearchListModel) addBook(book *BookItem) {
 func (s *SearchListModel) editBook(row int, key int, value string) {
 	var b = s.Books()[row]
 	switch key {
-	case Book_source:
-		b.SetBook_source(fmt.Sprintf("%s %s", b.Book_source(), value))
-	case Cover_url:
-		b.SetCover_url(value)
+	case Origin:
+		b.SetOrigin(fmt.Sprintf("%s %s", b.Origin(), value))
+	case CoverURL:
+		b.SetCoverUrl(value)
 	}
 	var bIndex = s.Index(row, 0, core.NewQModelIndex())
 	s.DataChanged(bIndex, bIndex, []int{key})
@@ -196,47 +175,44 @@ func (s *SearchListModel) roleNames() map[int]*core.QByteArray {
 }
 
 func (s *SearchListModel) add(item *models.Book) {
-	index := s.find(item.Title)
+	index := s.find(item.Name)
 	if index == -1 {
-		book := NewBookItem(nil)
+		book := NewBook(nil)
 		// if item.Title != "" {
-		book.SetName(item.Title)
+		book.SetName(item.Name)
 		// }
 		// if item.Author != "" {
 		book.SetAuthor(item.Author)
 		// }
 		// if item.BookURL != "" {
-		book.SetBook_url(item.BookURL)
+		book.SetNoteUrl(item.NoteURL)
 		// }
 		if item.CoverURL != "" {
-			book.SetCover_url(item.CoverURL)
+			book.SetCoverUrl(item.CoverURL)
 		}
 		if item.Kind != "" {
 			book.SetKind(item.Kind)
 		}
 		if item.LastChapter != "" {
-			book.SetLast_chapter(item.LastChapter)
-		}
-		if item.NoteURL != "" {
-			book.SetNote_url(item.NoteURL)
+			book.SetLastChapter(item.LastChapter)
 		}
 		if item.Introduce != "" {
-			book.SetIntro(item.Introduce)
+			book.SetIntroduce(item.Introduce)
 		}
-		book.SetBook_source(item.GetBookSource().BookSourceName)
+		book.SetTag(item.GetBookSource().BookSourceName)
 		s.AddBook(book)
 	} else {
-		s.editBook(index, Book_source, item.GetBookSource().BookSourceName)
+		s.editBook(index, Origin, item.GetBookSource().BookSourceName)
 		if item.CoverURL != "" {
-			fmt.Printf("modified cover to %s\n", item.CoverURL)
-			s.editBook(index, Cover_url, item.CoverURL)
+			fmt.Printf("modified cover of %s to %s\n", item.Name, item.CoverURL)
+			s.editBook(index, CoverURL, item.CoverURL)
 		}
 	}
 }
 
-func (s *SearchListModel) find(title string) int {
+func (s *SearchListModel) find(name string) int {
 	for k, v := range s.Books() {
-		if v.Name() == title {
+		if v.Name() == name {
 			return k
 		}
 	}

@@ -23,7 +23,7 @@ type Book struct {
 	// BookURL        string            `json:"book_url"`
 	CoverURL         string            `json:"coverUrl"`
 	Kind             string            `json:"kind"`
-	LastChapter      string            `json:"last_chapter"`
+	LastChapter      string            `json:"lastChapter"`
 	FinalRefreshData UnixTime          `json:"finalRefreshData"`
 	NoteURL          string            `json:"noteUrl"`
 	Introduce        string            `json:"introduce"`

@@ -8,6 +8,7 @@ ListView {
     anchors.fill: parent
     spacing: 8
     orientation:ListView.Vertical 
+    highlightFollowsCurrentItem: true
     delegate: BookItem{
         authorName: author
         title: name

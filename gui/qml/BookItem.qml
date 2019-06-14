@@ -2,17 +2,18 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.2
+import QtGraphicalEffects 1.0
 
 
 Rectangle{
     id:bookItem
     width: parent.width
-    height:48*root.dpi
+    height:root.width/5
     // anchors.fill: parent    
-    anchors.margins: 10
+    // anchors.margins: height/15
     property alias authorName: authorText.text
     property alias title: titleText.text
-    property alias introduce: introText.text
+    property alias intro: introText.text
     property alias bookSource: bookSourceText.text
     default property alias cover: coverImg.source
     property string bookUrl: ""
@@ -21,22 +22,35 @@ Rectangle{
 
     Row {
         width: parent.width
-        Rectangle{
-            width: parent.width/4
-            height: width/4*5
-            radius: 20
+        Item{
+            // width: parent.width/4
+            height: bookItem.height
+            width: height/5*4           
+            // anchors.margins: height/20           
+            // radius: 20
             Image{
                 id: coverImg      
                 asynchronous: true                    
                 anchors.fill: parent                
-                anchors.margins: 10
+                // anchors.margins: height/20
                 source: source?source:"qrc:/images/drawer.png"
+            }
+            Rectangle{
+                id: mask
+                anchors.fill: parent
+                visible: false
+                radius: 5
+            }
+            OpacityMask{    
+                anchors.fill: parent
+                source: coverImg
+                maskSource: mask
             }
         }
         
         Column {                                  
-            leftPadding: 10  
-            spacing: 10         
+            // leftPadding: height/10  
+            spacing: height/15         
             Text{
                 id: titleText
                 color: "lightsteelblue"
@@ -50,7 +64,7 @@ Rectangle{
             }
             Text{
                 id: introText
-                text: "简介"
+                text: bookData
             }
             Text{
                 id: bookSourceText
@@ -63,8 +77,10 @@ Rectangle{
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            console.log(title+" clicked!"+" root.y:"+root.y+" root.height:"+root.height+" popup.y:"+bookPopup.y);
-            bookPopup.open()
+            // console.log(title+" clicked!"+" root.y:"+root.y+" root.height:"+root.height+" popup.y:"+bookPopup.y+" popup.x:"+bookPopup.x+" item.y:"+bookItem.y);
+            console.log("model is "+bookItem.bookData);
+            
+            // bookPopup.open()
             
             // bookItem.clicked()
         }
@@ -85,29 +101,22 @@ Rectangle{
     } 
     Popup {
         id:bookPopup
-        width: root.width/3*2
-        height: root.height/2
+        width: root.width/4*3
+        height: root.height/1.5
         // anchors.centerIn: Overlay.overlay
         x: Math.round((parent.width - width) / 2)
-        y: Math.round((Screen.desktopAvailableHeight - height) / 2)
+        // y: 0
+        // z: 100
         // Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
         // x:(root.width-width)/2
         // y:0
         modal: true
         focus: true
-        closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent
+        closePolicy: Popup.CloseOnPressOutside
 
-        Rectangle
-        {
-//            width: 400
-//            height: 300
-            anchors.fill: parent
-            Text {
-                id: mytext
-                font.pixelSize: 24
-                text: qsTr("Popup 内容显示模块")
-            }
-        }
+        // BookIntro{
+        //     bookData: searchResult.currentItem
+        // }
     }
    
 }

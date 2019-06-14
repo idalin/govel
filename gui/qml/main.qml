@@ -21,10 +21,10 @@ ApplicationWindow {
     header: ToolBar{
         RowLayout{
             id: toolbar
-            anchors.fill: parent                              
+            anchors.fill: parent
             ToolButton {
-                id: settings                
-                Layout.alignment: Qt.AlignLeft            
+                id: settings
+                Layout.alignment: Qt.AlignLeft
                 property alias source: settingsIcon.source
                 contentItem: Image {
                     id: settingsIcon
@@ -49,8 +49,8 @@ ApplicationWindow {
             TextField{
                 id: search
                 // anchors.fill: parent
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter            
-                Layout.fillWidth: true             
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Layout.fillWidth: true
                 placeholderText: qsTr("搜索书名、作者")
                 onFocusChanged: function changeText() {
                     tabbar.currentIndex = 1
@@ -71,7 +71,7 @@ ApplicationWindow {
                 // anchors.right: parent.right
                 Layout.alignment: Qt.AlignRight
                 property  alias source: menuIcon.source
-                    
+
                 contentItem: Image {
                     id: menuIcon
                     fillMode: Image.Pad
@@ -102,7 +102,7 @@ ApplicationWindow {
                     }
                 }
             }
-        }  // end of toolbar 
+        }  // end of toolbar
     }
 
     StackView {
@@ -112,9 +112,9 @@ ApplicationWindow {
         anchors.top: header.bottom
     }
 
-    
+
     Item {
-        id: mainView       
+        id: mainView
         TabBar {
             id: tabbar
             width: root.width
@@ -138,10 +138,10 @@ ApplicationWindow {
         }
         StackLayout {
             width: parent.width
-            height: root.height - header.height-tabbar.height            
+            height: root.height - header.height-tabbar.height
             currentIndex: tabbar.currentIndex
             anchors.top: tabbar.bottom
-            anchors.topMargin: 10          
+            anchors.topMargin: 10
             Item {
                 id: allBooksTab
                 Text{
@@ -156,23 +156,23 @@ ApplicationWindow {
             }
             // Loader { id: pageLoader }
             ListView {
-                id: searchResult        
+                id: searchResult
                 // anchors.margins: 10
                 // anchors.fill: parent
                 spacing: 8
-                orientation:ListView.Vertical 
+                orientation:ListView.Vertical
                 delegate: BookItem{
                     authorName: author
                     title: name
-                    cover: cover_url
-                    introduce: intro
-                    bookSource: book_source
-                    bookUrl: book_url
+                    cover: coverUrl
+                    intro: introduce
+                    bookUrl: noteUrl
+                    bookSource: tag
                 }
-            
-                model: SearchListModel{
-                    id: booksModel
-                }
+
+               model: SearchListModel{
+                   id: booksModel
+               }
 
                 Connections {
                     target: search
@@ -213,8 +213,12 @@ ApplicationWindow {
             console.log("DPI:"+root.dpi);
             console.log("Height:"+Screen.desktopAvailableHeight);
             console.log("Width:"+Screen.desktopAvailableWidth);
-            console.log("real dpi:"+Screen.pixelDensity);        
+            console.log("real dpi:"+Screen.pixelDensity);
         }
     }
 
 }
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/

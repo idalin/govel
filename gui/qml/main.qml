@@ -39,7 +39,7 @@ ApplicationWindow {
                 onClicked: {
                     if (stackView.depth > 1) {
                         stackView.pop()
-                        listView.currentIndex = -1
+                        // listView.currentIndex = -1
                     } else {
                         drawer.open()
                     }
@@ -142,17 +142,48 @@ ApplicationWindow {
             currentIndex: tabbar.currentIndex
             anchors.top: tabbar.bottom
             anchors.topMargin: 10
-            Item {
-                id: allBooksTab
-                Text{
-                    text: qsTr("暂未实现")
-                    font: allBooks.font
-                    opacity: enabled ? 1.0 : 0.3
-                    color: "#000000"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
+            // Item {
+            //     id: allBooksTab
+            //     Text{
+            //         text: qsTr("暂未实现")
+            //         font: allBooks.font
+            //         opacity: enabled ? 1.0 : 0.3
+            //         color: "#000000"
+            //         horizontalAlignment: Text.AlignHCenter
+            //         verticalAlignment: Text.AlignVCenter
+            //         elide: Text.ElideRight
+            //     }
+            // }
+            ListView {
+                id: myShelf
+                // anchors.margins: 10
+                // anchors.fill: parent
+                spacing: 8
+                orientation:ListView.Vertical
+                delegate: ShelfItem{
+                    authorName: author
+                    title: name
+                    cover: coverUrl
+                    intro: introduce
+                    bookUrl: noteUrl
+                    bookSource: tag
+                    last_chapter_name: lastChapterName
+                    dur_chapter_name: durChapterName
+                    new_chapters: newChapters
+                    chapter_list_size: chapterListSize
+                    dur_chapter:durChapter
                 }
+
+               model: ShelfListModel{
+                   id: shelfModel
+               }
+               Component.onCompleted:{
+                   console.log("myShelf started.");                  
+               }
+               onCurrentItemChanged:{
+                   console.log("Shelf current item change to "+ currentItem.title+". author:"+currentItem.authorName+". NoteUrl:"+currentItem.bookUrl); 
+                   showBook(currentItem);                  
+               }
             }
             // Loader { id: pageLoader }
             ListView {
@@ -210,11 +241,16 @@ ApplicationWindow {
         Component.onCompleted: {
             VirtualKeyboardSettings.locale = "zh_CN.utf8";
             VirtualKeyboardSettings.styleName = "eink";
-            console.log("DPI:"+root.dpi);
-            console.log("Height:"+Screen.desktopAvailableHeight);
-            console.log("Width:"+Screen.desktopAvailableWidth);
-            console.log("real dpi:"+Screen.pixelDensity);
+            // console.log("DPI:"+root.dpi);
+            // console.log("Height:"+Screen.desktopAvailableHeight);
+            // console.log("Width:"+Screen.desktopAvailableWidth);
+            // console.log("real dpi:"+Screen.pixelDensity);
         }
+    }
+    
+    function showBook(book) {
+        console.log(book.title);
+        
     }
 
 }

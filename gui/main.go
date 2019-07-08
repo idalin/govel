@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/therecipe/qt/core"
@@ -10,13 +9,17 @@ import (
 	"github.com/therecipe/qt/quickcontrols2"
 
 	"github.com/idalin/govel/models"
+	"github.com/idalin/govel/utils"
 )
 
+var log = utils.GetLogger()
+
 func main() {
-	models.InitBS("../bs.json")
+	models.InitBS("./bs.json")
+	models.InitShelf("./myBookShelf.json")
 	err := os.Setenv("QT_IM_MODULE", "qtvirtualkeyboard")
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Error(err.Error())
 	}
 
 	// enable high dpi scaling

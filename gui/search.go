@@ -41,7 +41,6 @@ func (s *SearchListModel) init() {
 		Kind:        core.NewQByteArray2("kind", len("kind")),
 		LastChapter: core.NewQByteArray2("lastChapter", len("lastChapter")),
 		Introduce:   core.NewQByteArray2("introduce", len("introduce")),
-		ModelData:   core.NewQByteArray2("modelData", len("modelData")),
 	})
 	s.ConnectData(s.data)
 
@@ -49,6 +48,7 @@ func (s *SearchListModel) init() {
 	s.ConnectRoleNames(s.roleNames)
 	s.ConnectAddBook(s.addBook)
 	s.ConnectEditBook(s.editBook)
+	log.Debug("Start SearchListModel init.")
 }
 
 func (s *SearchListModel) data(index *core.QModelIndex, role int) *core.QVariant {
@@ -114,11 +114,6 @@ func (s *SearchListModel) data(index *core.QModelIndex, role int) *core.QVariant
 		{
 			// fmt.Println("data Intro called.")
 			return core.NewQVariant14(b.Introduce())
-		}
-	case ModelData:
-		{
-			fmt.Println("data modelData called.")
-			return core.NewQVariant1(b)
 		}
 	default:
 		{

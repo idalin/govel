@@ -116,72 +116,72 @@ func (s *ShelfListModel) data(index *core.QModelIndex, role int) *core.QVariant 
 	case Name:
 		{
 			// log.Debug("data Name called.")
-			return core.NewQVariant14(b.Name())
+			return core.NewQVariant1(b.Name())
 		}
 	case Author:
 		{
 			// fmt.Println("data Author called.")
-			return core.NewQVariant14(b.Author())
+			return core.NewQVariant1(b.Author())
 		}
 	case NoteURL:
 		{
 			// fmt.Println("data NoteURL called.")
-			return core.NewQVariant14(b.NoteUrl())
+			return core.NewQVariant1(b.NoteUrl())
 		}
 	case CoverURL:
 		{
 			// fmt.Println("data Cover_url called.")
-			return core.NewQVariant14(b.CoverUrl())
+			return core.NewQVariant1(b.CoverUrl())
 		}
 	case ChapterURL:
 		{
 			// fmt.Println("data Cover_url called.")
-			return core.NewQVariant14(b.ChapterUrl())
+			return core.NewQVariant1(b.ChapterUrl())
 		}
 	case Tag:
 		{
 			// fmt.Println("data Cover_url called.")
-			return core.NewQVariant14(b.Tag())
+			return core.NewQVariant1(b.Tag())
 		}
 	case Origin:
 		{
 			// fmt.Println("data Cover_url called.")
-			return core.NewQVariant14(b.Origin())
+			return core.NewQVariant1(b.Origin())
 		}
 	case Kind:
 		{
 			// fmt.Println("data Kind called.")
-			return core.NewQVariant14(b.Kind())
+			return core.NewQVariant1(b.Kind())
 		}
 	case LastChapter:
 		{
 			// fmt.Println("data LastChapter called.")
-			return core.NewQVariant14(b.LastChapter())
+			return core.NewQVariant1(b.LastChapter())
 		}
 	case Introduce:
 		{
 			// fmt.Println("data Intro called.")
-			return core.NewQVariant14(b.Introduce())
+			return core.NewQVariant1(b.Introduce())
 		}
 	// case AllowUpdate:
 	// 	{
-	// 		return core.NewQVariant11(shelf.AllowUpdate())
+	// 		return core.NewQVariant9(shelf.AllowUpdate())
 	// 	}
 	case ChapterListSize:
 		{
-			return core.NewQVariant7(shelf.ChapterListSize())
+			return core.NewQVariant5(shelf.ChapterListSize())
 		}
 	case DurChapter:
 		{
-			return core.NewQVariant7(shelf.DurChapter())
+			return core.NewQVariant5(shelf.DurChapter())
 		}
 	case DurChapterName:
 		{
-			return core.NewQVariant14(shelf.DurChapterName())
+			return core.NewQVariant1(shelf.DurChapterName())
 		}
 	case DurChapterPage:
 		{
-			return core.NewQVariant7(shelf.DurChapterPage())
+			return core.NewQVariant5(shelf.DurChapterPage())
 		}
 	case FinalDate:
 		{
@@ -193,31 +193,31 @@ func (s *ShelfListModel) data(index *core.QModelIndex, role int) *core.QVariant 
 	// 	}
 	case Group:
 		{
-			return core.NewQVariant7(shelf.Group())
+			return core.NewQVariant5(shelf.Group())
 		}
 	// case HasUpdate:
 	// 	{
-	// 		return core.NewQVariant11(shelf.HasUpdate())
+	// 		return core.NewQVariant9(shelf.HasUpdate())
 	// 	}
 	case IsLoading:
 		{
-			return core.NewQVariant11(shelf.IsLoading())
+			return core.NewQVariant9(shelf.IsLoading())
 		}
 	case LastChapterName:
 		{
-			return core.NewQVariant14(shelf.LastChapterName())
+			return core.NewQVariant1(shelf.LastChapterName())
 		}
 	case NewChapters:
 		{
-			return core.NewQVariant7(shelf.NewChapters())
+			return core.NewQVariant5(shelf.NewChapters())
 		}
 	case SerialNumber:
 		{
-			return core.NewQVariant7(shelf.SerialNumber())
+			return core.NewQVariant5(shelf.SerialNumber())
 		}
 	// case UseReplaceRule:
 	// 	{
-	// 		return core.NewQVariant11(shelf.UseReplaceRule())
+	// 		return core.NewQVariant9(shelf.UseReplaceRule())
 	// 	}
 	default:
 		{

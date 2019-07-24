@@ -90,53 +90,53 @@ func (a *AbstractBookListModel) data(index *core.QModelIndex, role int) *core.QV
 	case Name:
 		{
 			// fmt.Println("data Name called.")
-			return core.NewQVariant14(b.Name())
+			return core.NewQVariant1(b.Name())
 		}
 	case Author:
 		{
 			// fmt.Println("data Author called.")
-			return core.NewQVariant14(b.Author())
+			return core.NewQVariant1(b.Author())
 		}
 	case NoteURL:
 		{
 			// fmt.Println("data NoteURL called.")
-			return core.NewQVariant14(b.NoteUrl())
+			return core.NewQVariant1(b.NoteUrl())
 		}
 	case CoverURL:
 		{
 			// fmt.Println("data Cover_url called.")
-			return core.NewQVariant14(b.CoverUrl())
+			return core.NewQVariant1(b.CoverUrl())
 		}
 	case ChapterURL:
 		{
 			// fmt.Println("data Cover_url called.")
-			return core.NewQVariant14(b.ChapterUrl())
+			return core.NewQVariant1(b.ChapterUrl())
 		}
 	case Tag:
 		{
 			// fmt.Println("data Cover_url called.")
-			return core.NewQVariant14(b.Tag())
+			return core.NewQVariant1(b.Tag())
 		}
 	case Origin:
 		{
 			// fmt.Println("data Cover_url called.")
-			return core.NewQVariant14(b.Origin())
+			return core.NewQVariant1(b.Origin())
 		}
 	case Kind:
 		{
 			// fmt.Println("data Kind called.")
-			return core.NewQVariant14(b.Kind())
+			return core.NewQVariant1(b.Kind())
 		}
 	case LastChapter:
 		{
 			// fmt.Println("data LastChapter called.")
-			return core.NewQVariant14(b.LastChapter())
+			return core.NewQVariant1(b.LastChapter())
 		}
 
 	case Introduce:
 		{
 			// fmt.Println("data Intro called.")
-			return core.NewQVariant14(b.Introduce())
+			return core.NewQVariant1(b.Introduce())
 		}
 	default:
 		{

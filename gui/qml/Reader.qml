@@ -1,106 +1,200 @@
 import QtQuick 2.6
+import QtQuick.Controls 2.0
+import QtQuick.Layouts 1.3
 
 Rectangle {
     id: reader
     
-    anchors.fill: parent
+    // anchors.fill: parent
+    width:600
+    height:800
+    property int pageNumber
+    property int currentPage: 1
+    property alias maxLineCount: content.maximumLineCount
     
     color: "transparent"
-    TextMetrics {
-        id: textMetrics
-        font.family: "Arial"
-        elide: Text.ElideRight
-        elideWidth: content.width*content.maximumLineCount
-    // maximumLineCount:46
-        text:
-        "见方继藩在旁一直催问。众人看向方继藩，有点无言以对。\n" +
-"刘健脸色难看到了极点，他看了一眼神情认真的方继藩。\n" +
-"他深吸了一口气，渐渐的恢复了理智。\n" +
-"无论如何，自己的儿子……总算是活下来了。\n" +
-"即使他经历了痛苦，可他依旧活着。\n" +
-"活着就好。\n" +
-"没什么比活着更重要了。\n" +
-"他无法理解自己的儿子。\n" +
-"或许儿子大了，他的内心世界，岂是一个跨越了一个时代的人可以猜度的。\n" +
-"刘健毕竟见多识广，他慢慢的理智了下来。\n" +
-"于是，他想到了什么，整个人也镇定下来，他看向朱厚照和方继藩。\n" +
-"虽然心里再如何不情愿，也不可否认，若不是这两个家伙，自己的儿子，怕是死无葬身之地了。\n" +
-"如果没有他们俩个人，他今后再也见不到自己的儿子了。\n" +
-"虽然这个账算起来，若不是方继藩糊弄自己的儿子，也不至有今日。\n" +
-"可这账怎么算呢，自己的儿子，又不是三岁的孩子，人家愿意听方继藩的，又不是脑残和智障，还能说什么？\n" +
-"这只能说明方继藩他有本事吧，能让自己的儿子对他唯命是从。\n" +
-"刘健在自己的心里深深叹了一口气，随即便朝朱厚照和方继藩恳切的行了个礼：“多谢殿下，多谢齐国公，若非殿下和齐国公相救，吾儿死矣。”\n" +
-"朱厚照见这刘健行礼，方才的愤愤不平，消去了大半，于是眉开眼笑，朝着面前的人咧着嘴。\n" +
-"另一旁方继藩大度道：“治病救人，乃是应有之义，这算不得什么，莫说他是我的徒孙，哪怕刘杰只是一个外人，以我的善良，也定会竭力相救，所谓救人一命胜造七级浮屠，我就当给自己积阴德了。”\n" +
-"刘健抽了抽鼻子，接下来不知该说点啥好了，不过怎么说，自己的儿子命保住了。\n" +
-"刘杰活着，这对于任何来说都是件好事。\n" +
-"弘治皇帝等人松了口气，站在这里，不便让刘杰静养，这里距离镇国府很近，弘治皇帝便移驾镇国府，众臣纷纷尾随而去。\n" +
-"弘治皇帝这一路，似乎想了不少，坐下，四顾左右，却看到了一个陌生的面孔，他朝向一个驼背的‘老者’问：“此老丈是谁？”\n" +
-"老丈：“……”\n" +
-"方继藩看向老丈，心里生出很很多感触，随即便叹口气，朝弘治皇帝说道。\n" +
-"“陛下，这是儿臣的弟子徐经。此番是徐经与儿臣一道，将刘杰送来的。”\n" +
-"海上最是摧残人，何况，作为巡海大使，还需操心这船队以及各个港口大小的事务。\n" +
-"毕竟是开拓者，带着船队，去往未知的领域，一切的制度，都没有创立，港口如何补给，船队怎么进行编练，哪一个人可以用，哪一个不可以用，各处海域的水文如何，哪一条航线有水贼，这所有的事，都需徐经去过问，而后，再选拔出人来，建立一个原始的制度。\n" +
-"这不仅仅考验一个人的领导能力，更考验一个人的耐力和恒心，面对种种未知，还要保证所有人的生命安全，面对这种压力，整个人精神都是紧绷的，这种压力可不是一般人可以承受的。\n" +
-"徐经这些年可以说是承受了巨大的心里压力，和精神上的焦虑，自然是变得苍老。\n" +
-"弘治皇帝大惊失色，此刻他睁大眼睛深深的盯着徐经直看。\n" +
-"他对徐经是有印象的。\n" +
-"曾经的徐经意气风发，人长得还是很不错的。\n" +
-"可是……这隔了数年不见，徐经早已是面目全非，一点最初的影子都没了。\n" +
-"他完全认不出来了，弘治皇帝心里很震撼，微微抿着嘴，看徐经的目光变得越发认真了。\n" +
-"这样看来，徐经所遭遇的磨难，未必比刘杰要少。\n" +
-"徐经站出来，朝弘治皇帝行了个大礼，他感慨良多，拜下道：“臣见过陛下。”\n" +
-"此刻弘治皇帝觉得自己的眼睛，又有点湿润了，他忍不住抬起头来，尽力使自己的眼泪不掉下来，努力的平复着心中的感慨，朝着徐经一字一句道：“方氏门下，皆义士啊。”\n" +
-"他今日，已经不知夸赞过多少次了，却是觉得怎么夸赞都不足够。\n" +
-"弘治皇帝抿了抿想了想，想在用些高大上的话来夸赞他们，可是他在脑海想了无数遍，他除了这句话，在也找不到更好的词语来形容了。\n" +
-"弘治皇帝随后仔细端详着徐经，认真的问道：“徐卿家，黄金洲的情况如何？”\n" +
-"“很不好。”徐经斩钉截铁的道。\n" +
-"方继藩站在一旁，本是微笑，听了徐经这话，脸都拉长了。\n" +
-"弘治皇帝诧异，眉头轻轻一扬，困惑的问道：“嗯，如何不好？”\n" +
-"徐经肃容，朝着众人一字一句的道。\n" +
-"“大量的军民，迁徙至黄金洲，这黄金洲，固然是土地肥沃，可是未开发的土地遍布，到处都是林莽，有数不清的蛇虫，那里还有飓风，一旦飓风来袭，一切化为乌有。军民们沿着口岸栖息，周边遍布了土人，土人们时不时会袭击落单的军民；不只是如此，一旦遭遇了疾病，虽然带去了许多医学院的大夫，可毕竟……条件也是有限。药品有限，粮食有限，甚至……发现了大量的煤铁，可要将他们炼成钢铁，堆砌的高炉，因为能工巧匠不足，水平还很低劣。“\n" +
-"徐经顿了顿，吞了一口唾沫，才接着继续说道。\n" +
-"“更不必说，西班牙人比先我大明去的更早，在那里的许多地方，已经站稳了脚跟，他们甚至与某些土人联合了起来，四处煽风点火，他们的军队，布置在北部沿岸，对于错综复杂的航路，比我们了解的更多，好几次，他们趁我们立足未稳，袭击我们。”\n" +
-"“去岁，黄金洲疫病流行，幸好这疫病很快的平息下来，可即便如此，损失也是惨重。还有马匹不足的问题……这些问题，多不胜数，新津郡王每日要过问的事，多如牛毛，今日解决了一件事，到了明日，就有三个麻烦寻上门。不少的军民，十分思念乡土，有人故去，他的家眷希望船队将起尸首带回故土，船队无法运输，便心怀怨愤之心。”\n" +
-"弘治皇帝听到此处，沉默了。\n" +
-"随扈的众臣个个皱眉。\n" +
-"开拓黄金洲，乃是国策，这些年来，朝廷花费了多少的人力物力啊。\n" +
-"可现在看来……\n" +
-"“可是……”徐经昂首，他眼里放出光芒来，一字一句的很是郑重的说道。\n" +
-"“纵是问题重重，有数不清的噩耗，那黄金洲万里沃土之上，上有新津郡王鞠躬尽瘁，亲带人垦荒，上马驱贼，下有无数似刘杰这样的豪杰，他们传授人知识，为了搭建一个医馆，四处寻觅草药，那里的许多植物，都与我大明不同，为了证明药效，就必须一个一个去尝，可他们依旧故我，舍身尝百草。更有豪杰，听闻土人杀至，奋不顾身，冲杀最前。还有豪杰，为了搭建起炼钢铁用的高炉，带着军民，数日不眠不歇。为了垦荒，他们深入进密林里，砍伐巨木，建起农舍。有人至西班牙的领地，探测他们的虚实，九死一生。有人为了繁殖马匹，成日与种MA同吃同睡，观察马至黄金洲之后的习性如何。有人遭遇蒙受，击之。飓风来了，一切都被吹了个干净，可是很快，便有人带着军民，重建家园。西班牙人至，则军民同心，新津郡王亲临阵线，豪杰纷纷而起，军民同心，一闻遇袭的钟响，男子提刀扬枪，人人死战，纵有时敌强我弱，亦不肯退，直至痛击西班牙人方止。”\n" +
-"徐经炮语连珠的说了一大堆，可他一口气都没歇下，激扬高亢的说着。\n" +
-"“军民们在黄金洲，建起了六十多个城镇，一百多个市集，开垦了数不清的良田，建了医馆、学堂，搭建起铁炉，男子同心，女子同德。读书人上马，农人读书，匠人亦在闲暇时垦荒，女子修桥，稚童铺路，陛下……黄金洲失其鹿，鹿死谁手，臣不敢断言，可臣敢言，自新津郡王以降，贼子不杀我大明军民最后一人，断无定鼎黄金洲之理。”\n" +
-"弘治皇帝听到此处，又沉默了。\n" +
-"群臣个个垂头，默然无言。\n" +
-"便连方继藩似乎也深受感触。\n" +
-"国策说起来容易，在紫禁城里，皇帝一声令下，于是无数人跨越重洋迁徙，可是……诏书下来容易，可是因此而影响了数十万的人丁，他们所遭遇的困境，却是不容易啊。\n" +
-"他们在黄金洲，没有退路。\n" +
-"无论遇到任何困难，任何险境，他们都要咬着牙坚持下去，永不后退。\n" +
-"“这便是臣在黄金洲之所见，请陛下……明鉴！”\n" +
-"徐经抬头，哪怕是背驼了，显得苍老，皮肤如老榆树皮一般生出了褶皱，可这些，都掩盖不了他眼中，闪闪的光辉，还有他面容里的希冀。\n" +
-"………………\n" +
-"第三章送到，这一章不好写，那啥，能求点月票不。支持一下嘛，乡里乡亲的。\n" +
-"就当给老虎一点面子。"
+    Rectangle{
+        id: readerHeader
+        width: parent.width
+        // height: 100
+        // border.color: "red"
+        // border.width:1
+        color: "white"
+        z:100
+        RowLayout{
+            anchors.fill: parent
+            ToolButton {
+                id: back
+                Layout.alignment: Qt.AlignLeft
+                contentItem: Image {
+                    id: backIcon
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "qrc:/images/back.png"
+                }
+                background: Rectangle {
+                    color: "#FFFFFF"
+                }
+                onClicked: {
+                    stackView.pop()                 
+                }
+            }
+            Label{
+                text:"测试"
+            }
+            ToolButton {
+                // id: readerMenu
+                Layout.alignment: Qt.AlignRight
+                contentItem: Image {
+                    id: menuIcon
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "qrc:/images/menu@4x.png"
+                }
+                onClicked: readerMenu.open()
+                background: Rectangle {
+                    color: "#FFFFFF"
+                }
+                Menu {
+                    id: readerMenu
+                    x: parent.width - width
+                    transformOrigin: Menu.TopRight
+                    MenuItem {
+                        text: "添加本地"
+                        onTriggered: fileDialog.open()
+                    }
+                    MenuItem {
+                        text: "添加网址"
+                    }
+                    MenuItem {
+                        text: "退出"
+                        onClicked:{
+                            Qt.quit()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Rectangle{
+        id:left
+        height: parent.height
+        width: parent.width/3
+        // border.color:"black"
+        // border.width:1
+        MouseArea {
+            anchors.fill: parent
+            onClicked:{
+                content.topPadding+=reader.height;
+                reader.currentPage-=1;
+                if(content.topPadding>0){
+                    content.topPadding=0;
+                    reader.currentPage=1;
+                }
+            }
+        }
+    }
+    Rectangle{
+        id:leftMiddle
+        height: parent.height/5
+        x: parent.width/3
+        width: parent.width/3
+        // border.color:"black"
+        // border.width:1
+        MouseArea {
+            anchors.fill: parent
+            onClicked:{
+                content.topPadding+=reader.height;
+                reader.currentPage-=1;
+                if(content.topPadding>0){
+                    content.topPadding=0;
+                    reader.currentPage=1;
+                }
+            }
+        }
+    }
+    Rectangle{
+        id:menu
+        height: parent.height/5*3
+        width: parent.width/3
+        x: parent.width/3
+        y: parent.height/5
+        // border.color:"blue"
+        // border.width:1
+        MouseArea {
+            anchors.fill: parent
+            onClicked:{
+                readerHeader.visible=readerHeader.visible?false:true;
+            }
+        }
+    }
+    Rectangle{
+        id:right
+        height: parent.height
+        width: parent.width/3
+        x: parent.width/3*2
+        // border.color:"red"
+        // border.width:1
+        MouseArea {
+            anchors.fill: parent
+            onClicked:{               
+                if(reader.currentPage<reader.pageNumber){
+                    content.topPadding-=reader.height;
+                    reader.currentPage+=1;
+                }
+            }
+        }
+    }
+    Rectangle{
+        id:rightMiddle
+        height: parent.height/5
+        width: parent.width/3
+        x: parent.width/3
+        y: parent.height/5*4
+        // border.color:"red"
+        // border.width:1
+        MouseArea {
+            anchors.fill: parent
+            onClicked:{
+                if(reader.currentPage<reader.pageNumber){
+                    content.topPadding-=reader.height;
+                    reader.currentPage+=1;
+                }
+            }
+        }
+    }
+    Text {
+        id:content
+        height: parent.height
+        width: parent.width
+        wrapMode: Text.WordWrap
+        font.pixelSize:20
+        lineHeight: font.pixelSize+5
+        lineHeightMode: Text.FixedHeight
+        verticalAlignment:Text.AlignTop
+        textFormat: Text.PlainText
+        padding: 5
+        clip: true
+        text:"test"       
+        Component.onCompleted:{
+            console.log("height:"+content.height);
+            console.log("line height: "+content.lineHeight);           
+            var ml=Math.ceil(content.height/content.lineHeight-1);
+            // console.log("maximumLineCount: "+ content.maximumLineCount)
+            reader.pageNumber=Math.ceil(content.lineCount/ml);
+            console.log("line count:"+ content.lineCount);
+            
+            console.log( reader.pageNumber);
+        }
     }
     
-    Text{
-        id:content
-        width:parent.width
-        wrapMode: Text.WordWrap
-        lineHeight: font.pixelSize+5
-        lineHeightMode: Text.FixedHeight 
-        text:textMetrics.elidedText
-        maximumLineCount:Math.ceil(root.height/content.lineHeight-1);
-    }
     
     Component.onCompleted: {
         stackView.anchors.top=header.top;
-        header.visible=false;
-        // content.maximumLineCount=30;
-        console.log("line count:"+ content.lineCount);
-        console.log("reader height: "+root.height+". line height: "+content.lineHeight+". caculated line count: "+ root.height/content.lineHeight);
-        console.log(content.text);
-               
+        header.visible=false;           
     }
     
 }

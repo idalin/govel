@@ -142,18 +142,6 @@ ApplicationWindow {
             currentIndex: tabbar.currentIndex
             anchors.top: tabbar.bottom
             anchors.topMargin: 10
-            // Item {
-            //     id: allBooksTab
-            //     Text{
-            //         text: qsTr("暂未实现")
-            //         font: allBooks.font
-            //         opacity: enabled ? 1.0 : 0.3
-            //         color: "#000000"
-            //         horizontalAlignment: Text.AlignHCenter
-            //         verticalAlignment: Text.AlignVCenter
-            //         elide: Text.ElideRight
-            //     }
-            // }
             ListView {
                 id: myShelf
                 // anchors.margins: 10
@@ -161,11 +149,11 @@ ApplicationWindow {
                 spacing: 8
                 orientation:ListView.Vertical
                 delegate: ShelfItem{
-                    authorName: author
-                    title: name
-                    cover: coverUrl
-                    intro: introduce
-                    bookUrl: noteUrl
+                    authorName: bookInfoBean.author
+                    title: bookInfoBean.name
+                    cover: bookInfoBean.coverUrl
+                    intro: bookInfoBean.introduce
+                    bookUrl: bookInfoBean.noteUrl
                     bookSource: tag
                     last_chapter_name: lastChapterName
                     dur_chapter_name: durChapterName
@@ -173,17 +161,18 @@ ApplicationWindow {
                     chapter_list_size: chapterListSize
                     dur_chapter:durChapter
                 }
-
-               model: ShelfListModel{
+                ShelfListModel{
                    id: shelfModel
-               }
-               Component.onCompleted:{
-                   console.log("myShelf started.");                  
-               }
-               onCurrentItemChanged:{
-                   console.log("Shelf current item change to "+ currentItem.title+". author:"+currentItem.authorName+". NoteUrl:"+currentItem.bookUrl); 
-                   showBook(currentItem);                  
-               }
+                   source: "/home/dalin/go/src/github.com/idalin/govel/gui/myBookShelf.json"
+                }
+                model: shelfModel.model
+                // Component.onCompleted:{
+                //     console.log("myShelf started.");                  
+                // }
+                onCurrentItemChanged:{
+                    // console.log("Shelf current item change to "+ currentItem.title+". author:"+currentItem.authorName+". NoteUrl:"+currentItem.bookUrl); 
+                    // showBook(currentItem);                  
+                }
             }
             // Loader { id: pageLoader }
             ListView {
@@ -201,9 +190,9 @@ ApplicationWindow {
                     bookSource: tag
                 }
 
-               model: SearchListModel{
-                   id: booksModel
-               }
+            //    model: SearchListModel{
+            //        id: booksModel
+            //    }
 
                 Connections {
                     target: search
@@ -249,8 +238,7 @@ ApplicationWindow {
     }
     
     function showBook(book) {
-        console.log(book.title);
-        
+        console.log(book.title);       
     }
 
 }

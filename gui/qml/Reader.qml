@@ -1,24 +1,30 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
+import QMLFileIo 1.0
 
 Rectangle {
     id: reader
-    
-    // anchors.fill: parent
-    width:600
-    height:800
+    width: 600
+    height: 800
     property int pageNumber
     property int currentPage: 1
     property alias maxLineCount: content.maximumLineCount
+    property string chapterName
+    property string bookName
+    property string contentText   
+    property string chapterURL 
     
     color: "transparent"
+    QMLFileIo{
+        id: fileReader
+        path: "/home/dalin/go/src/github.com/idalin/govel/storage/cache/明朝败家子-httpswwwzwducom/01177-第一千零三章：诛之.nb"
+    }
+
     Rectangle{
         id: readerHeader
         width: parent.width
-        // height: 100
-        // border.color: "red"
-        // border.width:1
+        height:80
         color: "white"
         z:100
         RowLayout{
@@ -41,7 +47,8 @@ Rectangle {
                 }
             }
             Label{
-                text:"测试"
+                text:myShelf.currentItem.title
+                font.pixelSize: 22
             }
             ToolButton {
                 // id: readerMenu
@@ -89,6 +96,7 @@ Rectangle {
             anchors.fill: parent
             onClicked:{
                 content.topPadding+=reader.height;
+                console.log("pre page clicked.")
                 reader.currentPage-=1;
                 if(content.topPadding>0){
                     content.topPadding=0;
@@ -107,6 +115,7 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             onClicked:{
+                console.log("pre page clicked.");
                 content.topPadding+=reader.height;
                 reader.currentPage-=1;
                 if(content.topPadding>0){
@@ -122,12 +131,13 @@ Rectangle {
         width: parent.width/3
         x: parent.width/3
         y: parent.height/5
-        // border.color:"blue"
-        // border.width:1
+        border.color:"blue"
+        border.width:1
         MouseArea {
             anchors.fill: parent
             onClicked:{
                 readerHeader.visible=readerHeader.visible?false:true;
+                console.log("switch header.")
             }
         }
     }
@@ -141,6 +151,8 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             onClicked:{               
+                console.log("next page clicked.");
+                // console.log(content.text);
                 if(reader.currentPage<reader.pageNumber){
                     content.topPadding-=reader.height;
                     reader.currentPage+=1;
@@ -159,6 +171,7 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             onClicked:{
+                console.log("next page clicked.")
                 if(reader.currentPage<reader.pageNumber){
                     content.topPadding-=reader.height;
                     reader.currentPage+=1;
@@ -166,11 +179,13 @@ Rectangle {
             }
         }
     }
+
     Text {
         id:content
         height: parent.height
         width: parent.width
         wrapMode: Text.WordWrap
+        color: "black"
         font.pixelSize:20
         lineHeight: font.pixelSize+5
         lineHeightMode: Text.FixedHeight
@@ -178,7 +193,7 @@ Rectangle {
         textFormat: Text.PlainText
         padding: 5
         clip: true
-        text:"test"       
+        text:"fasdfadsfasdfffffffffffffffffd"       
         Component.onCompleted:{
             console.log("height:"+content.height);
             console.log("line height: "+content.lineHeight);           
@@ -186,15 +201,28 @@ Rectangle {
             // console.log("maximumLineCount: "+ content.maximumLineCount)
             reader.pageNumber=Math.ceil(content.lineCount/ml);
             console.log("line count:"+ content.lineCount);
-            
-            console.log( reader.pageNumber);
+            console.log("reader.pageNumber:" + reader.pageNumber);
+            console.log("reading form file...");
+            console.log("read done.")
         }
     }
     
     
     Component.onCompleted: {
-        stackView.anchors.top=header.top;
-        header.visible=false;           
+        if(stackView){
+            stackView.anchors.top=header.top;
+        }
+        readerHeader.visible=false;           
+        // console.log( fileReader.readAll());
+        content.text = fileReader.readAll();
+        if (root){
+            console.log("root height is:"+root.height);
+            reader.height = root.height;
+            reader.width = root.width;
+        }
+        if(header){
+            header.visible = false;
+        }
     }
     
 }

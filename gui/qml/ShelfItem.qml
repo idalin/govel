@@ -4,7 +4,6 @@ import QtQuick.Controls 2.0
 import QtQuick.Window 2.2
 import QtGraphicalEffects 1.0
 
-
 Rectangle{
     id:shelfItem
     width: parent.width
@@ -149,8 +148,10 @@ Rectangle{
         anchors.fill: parent
         onClicked: {
             // console.log(title+" clicked!"+" root.y:"+root.y+" root.height:"+root.height+" popup.y:"+bookPopup.y+" popup.x:"+bookPopup.x+" item.y:"+bookItem.y);
-            console.log("model is "+ title+" .index is:"+index);            
+            // console.log("model is "+ title+" .index is:"+index);            
             myShelf.currentIndex=index;
+            myShelf.model.setProperty(index,"finalDate",( new Date()).valueOf());
+            // console.log(myShelf.model.get(index).finalDate);
             stackView.push("Reader.qml")
             
             // bookPopup.open()

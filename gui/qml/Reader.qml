@@ -13,13 +13,23 @@ Rectangle {
     property string chapterName
     property string bookName
     property string contentText   
-    property string chapterURL 
+    property string chapterURL
+    property string cachPath: "/home/dalin/go/src/github.com/idalin/govel/storage/cache"
     property var book: myShelf.currentItem.book
     
     color: "transparent"
     QMLFileIo{
         id: fileReader
         path: "/home/dalin/go/src/github.com/idalin/govel/storage/cache/明朝败家子-httpswwwzwducom/01177-第一千零三章：诛之.nb"
+        onPathChanged:{
+            console.log("file path changed:"+ path);
+            var t = fileReader.readAll();
+            if( t==""){
+                console.log("empty file.");
+            }else{
+                content.text = t;
+            }
+        }
     }
 
     Rectangle{
@@ -196,16 +206,10 @@ Rectangle {
         padding: 5
         clip: true
         text:"fasdfadsfasdfffffffffffffffffd"       
-        Component.onCompleted:{
-            console.log("height:"+content.height);
-            console.log("line height: "+content.lineHeight);           
+        onTextChanged:{
+            content.topPadding = 0;
             var ml=Math.ceil(content.height/content.lineHeight-1);
-            // console.log("maximumLineCount: "+ content.maximumLineCount)
             reader.pageNumber=Math.ceil(content.lineCount/ml);
-            console.log("line count:"+ content.lineCount);
-            console.log("reader.pageNumber:" + reader.pageNumber);
-            console.log("reading form file...");
-            console.log("read done.")
         }
     }
     
@@ -225,6 +229,15 @@ Rectangle {
         if(header){
             header.visible = false;
         }
+        fileReader.path = getChapterFile();
     }
     
+    function getChapterFile(){
+        var bookPath = book.bookInfoBean.name+"-"+book.bookInfoBean.tag.replace(/[./:]/g,"");
+        var str = "" + book.durChapter;
+        var pad = "00000";
+        var ans = pad.substring(0, pad.length - str.length) + str;
+        var fileName = ans+"-"+book.durChapterName+".nb";
+        return cachPath+"/"+bookPath+"/"+fileName;
+    }
 }

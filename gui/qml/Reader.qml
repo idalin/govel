@@ -14,6 +14,7 @@ Rectangle {
     property string bookName
     property string contentText   
     property string chapterURL 
+    property var book: myShelf.currentItem.book
     
     color: "transparent"
     QMLFileIo{
@@ -43,11 +44,12 @@ Rectangle {
                     color: "#FFFFFF"
                 }
                 onClicked: {
-                    stackView.pop()                 
+                    stackView.pop()    
+                    header.visible = true             
                 }
             }
             Label{
-                text:myShelf.currentItem.title
+                text: book.bookInfoBean.name
                 font.pixelSize: 22
             }
             ToolButton {
@@ -131,8 +133,8 @@ Rectangle {
         width: parent.width/3
         x: parent.width/3
         y: parent.height/5
-        border.color:"blue"
-        border.width:1
+        // border.color:"blue"
+        // border.width:1
         MouseArea {
             anchors.fill: parent
             onClicked:{

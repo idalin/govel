@@ -142,43 +142,26 @@ ApplicationWindow {
             currentIndex: tabbar.currentIndex
             anchors.top: tabbar.bottom
             anchors.topMargin: 10
+
+            // 书架
             ListView {
                 id: myShelf
                 // anchors.margins: 10
                 // anchors.fill: parent
                 spacing: 8
                 orientation:ListView.Vertical
-                delegate: ShelfItem{
-                    authorName: bookInfoBean.author
-                    title: bookInfoBean.name
-                    cover: bookInfoBean.coverUrl
-                    intro: bookInfoBean.introduce
-                    bookUrl: bookInfoBean.noteUrl
-                    bookSource: tag
-                    last_chapter_name: lastChapterName
-                    dur_chapter_name: durChapterName
-                    new_chapters: newChapters
-                    chapter_list_size: chapterListSize
-                    dur_chapter:durChapter
-                }
+                delegate: ShelfItem{}
                 ShelfListModel{
                    id: shelfModel
                    source: "/home/dalin/go/src/github.com/idalin/govel/gui/myBookShelf.json"
                 }
                 model: shelfModel.model
-                // Component.onCompleted:{
-                //     console.log("myShelf started.");                  
-                // }
-                onCurrentItemChanged:{
-                    // console.log("Shelf current item change to "+ currentItem.title+". author:"+currentItem.authorName+". NoteUrl:"+currentItem.bookUrl); 
-                    // showBook(currentItem);                  
-                }
+
             }
-            // Loader { id: pageLoader }
+
+            // 搜索页
             ListView {
                 id: searchResult
-                // anchors.margins: 10
-                // anchors.fill: parent
                 spacing: 8
                 orientation:ListView.Vertical
                 delegate: BookItem{
@@ -189,10 +172,9 @@ ApplicationWindow {
                     bookUrl: noteUrl
                     bookSource: tag
                 }
-
-            //    model: SearchListModel{
-            //        id: booksModel
-            //    }
+                model: SearchListModel{
+                    id: booksModel
+                }
 
                 Connections {
                     target: search
@@ -202,6 +184,8 @@ ApplicationWindow {
                     }
                 }
             }
+
+            // 发现页，尚未实现
             Item {
                 id: discoverTab
                 Text{
@@ -230,10 +214,6 @@ ApplicationWindow {
         Component.onCompleted: {
             VirtualKeyboardSettings.locale = "zh_CN.utf8";
             VirtualKeyboardSettings.styleName = "eink";
-            // console.log("DPI:"+root.dpi);
-            // console.log("Height:"+Screen.desktopAvailableHeight);
-            // console.log("Width:"+Screen.desktopAvailableWidth);
-            // console.log("real dpi:"+Screen.pixelDensity);
         }
     }
     
@@ -242,7 +222,3 @@ ApplicationWindow {
     }
 
 }
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

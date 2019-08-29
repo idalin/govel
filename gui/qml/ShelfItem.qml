@@ -7,32 +7,9 @@ import QtGraphicalEffects 1.0
 Rectangle{
     id:shelfItem
     width: parent.width
-    height:root.width/5
-    // anchors.fill: parent    
-    // anchors.margins: height/15
-    property alias authorName: authorText.text
-    property alias title: titleText.text
-    property string intro
-    property alias bookSource: bookSourceText.text
-    default property alias cover: coverImg.source
-    property string bookUrl: ""
-    property bool allowUpdate   
-	property int chapter_list_size
-	property int dur_chapter 
-    property int unreadChapter: chapter_list_size-dur_chapter-1
-	property string dur_chapter_name
-	property int durChapterPage
-	property string finalDate  
-	property string finalRefreshDate
-	property int group      
-	property bool hasUpdate
-	property bool isLoading
-	property string last_chapter_name
-	property int new_chapters
-	property string noteUrl
-	property int serialNumber
-	property string tag
-	property bool useReplaceRule
+    height:root.width/5 
+    property int unreadChapter: book.chapterListSize-book.durChapter-1
+    property var book: myShelf.model.get(index)
     
     signal clicked
 
@@ -50,7 +27,7 @@ Rectangle{
                 asynchronous: true                    
                 anchors.fill: parent                
                 // anchors.margins: height/20
-                source: source?source:"qrc:/images/drawer.png"
+                source: book.bookInfoBean.coverUrl?book.bookInfoBean.coverUrl:"qrc:/images/drawer.png"
             }
             Rectangle{
                 id: mask
@@ -75,15 +52,15 @@ Rectangle{
                 color: "lightsteelblue"
                 font.bold: true
                 // font.pixelSize: font.pixelSize*1.2
-                text: "书名"
+                text: book.bookInfoBean.name
             }
             Text{
                 id: authorText              
-                text: "作者"
+                text: book.bookInfoBean.author
             }
             Text{
                 id: durChapterName              
-                text: dur_chapter_name
+                text: book.durChapterName
             }
             // TextMetrics {
             //     id: introTextMetrics
@@ -97,12 +74,12 @@ Rectangle{
                 id: lastChapter
                 // width:parent.width
                 // wrapMode: Text.WordWrap
-                text: last_chapter_name
+                text: book.lastChapterName
             }
             Text{
                 id: bookSourceText
                 wrapMode: Text.WordWrap
-                text: "书源"
+                text: book.bookInfoBean.origin
             }
         }
         
@@ -128,14 +105,14 @@ Rectangle{
             }
             
             Component.onCompleted: {
-                if (new_chapters>0){
+                if (book.newChapters>0){
                     unreadBadge.color="red"
                 }else if(unreadChapter>0){
                     unreadBadge.color="black"
                 }else{
                     unreadBadge.visible=false
                 }
-                if(new_chapters>99||unreadChapter>99){
+                if(book.newChapters>99||unreadChapter>99){
                     badge.width=badge.height*2
                 }
             }

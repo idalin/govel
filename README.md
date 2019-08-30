@@ -44,3 +44,8 @@ go get -u -v github.com/idalin/govel
 ```
 还没有正式完成，所以其实 **安装使用不了的** 。不过主要功能可以用了，通过 go test可以看到。 models/source_test.go 可以测试搜书等功能， storage/file_test.go可以实现本地缓存的测试。
 当然，需要自备书源配置文件。
+
+----
+## 依赖
+[qml-fileio](https://github.com/chili-epfl/qml-fileio) : 提供QML对文件的读写，需要编译成QT的QML插件
+[qt的go绑定](https://github.com/therecipe/qt.git) : 用GO语言写QT界面

@@ -14,7 +14,7 @@ Rectangle {
     property string bookName
     property string contentText   
     property string chapterURL
-    property string cachPath: "/home/dalin/go/src/github.com/idalin/govel/storage/cache"
+    property string cachePath: settings.config.cachePath
     property var book: myShelf.currentItem.book
     
     color: "transparent"
@@ -55,7 +55,6 @@ Rectangle {
                 }
                 onClicked: {
                     stackView.pop()    
-                    header.visible = true             
                 }
             }
             Label{
@@ -238,6 +237,6 @@ Rectangle {
         var pad = "00000";
         var ans = pad.substring(0, pad.length - str.length) + str;
         var fileName = ans+"-"+book.durChapterName+".nb";
-        return cachPath+"/"+bookPath+"/"+fileName;
+        return cachePath+"/"+bookPath+"/"+fileName;
     }
 }

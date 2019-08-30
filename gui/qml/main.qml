@@ -17,13 +17,23 @@ ApplicationWindow {
     minimumWidth: 600
     minimumHeight: 800
 
+    Setting{
+        id: settings
+        source:"../config.json"
+        Component.onCompleted: {
+            for(var c in settings.config){
+                console.log("key: " + c+" value: " + settings.config[c])
+            }
+        }
+    }
+
     // 头部工具栏
     header: ToolBar{
         RowLayout{
             id: toolbar
             anchors.fill: parent
             ToolButton {
-                id: settings
+                id: settingBottun
                 Layout.alignment: Qt.AlignLeft
                 property alias source: settingsIcon.source
                 contentItem: Image {
@@ -67,8 +77,6 @@ ApplicationWindow {
 
             ToolButton {
                 id: menu
-                // anchors.fill:parent.TopRight
-                // anchors.right: parent.right
                 Layout.alignment: Qt.AlignRight
                 property  alias source: menuIcon.source
 
@@ -110,6 +118,13 @@ ApplicationWindow {
         width: parent.width
         initialItem: mainView
         anchors.top: header.bottom
+        onDepthChanged:{
+            if(depth<=1){
+                header.visible=true;
+                stackView.anchors.top=header.bottom;
+
+            }
+        }
     }
 
 
@@ -153,7 +168,7 @@ ApplicationWindow {
                 delegate: ShelfItem{}
                 ShelfListModel{
                    id: shelfModel
-                   source: "/home/dalin/go/src/github.com/idalin/govel/gui/myBookShelf.json"
+                   source: "./myBookShelf.json"
                 }
                 model: shelfModel.model
 
@@ -179,7 +194,6 @@ ApplicationWindow {
                 Connections {
                     target: search
                     onAccepted: {
-                        // searchResult.model.clear()
                         searchResult.model.doSearch(search.text)
                     }
                 }

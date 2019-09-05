@@ -19,7 +19,7 @@ ApplicationWindow {
 
     Setting{
         id: settings
-        source:"../config.json"
+        source:"./config.json"
         Component.onCompleted: {
             for(var c in settings.config){
                 console.log("key: " + c+" value: " + settings.config[c])
@@ -231,8 +231,4 @@ ApplicationWindow {
         }
     }
     
-    function showBook(book) {
-        console.log(book.title);       
-    }
-
 }

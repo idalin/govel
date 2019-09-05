@@ -48,4 +48,12 @@ go get -u -v github.com/idalin/govel
 ----
 ## 依赖
 [qml-fileio](https://github.com/chili-epfl/qml-fileio) : 提供QML对文件的读写，需要编译成QT的QML插件
+
 [qt的go绑定](https://github.com/therecipe/qt.git) : 用GO语言写QT界面
+
+## 屏幕截图
+![首页](screenshot/shelf.png)
+首页
+
+![输入法](screenshot/input.png)
+输入法

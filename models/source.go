@@ -169,6 +169,14 @@ func (b *BookSource) SearchBook(title string) []*Book {
 		return nil
 	}
 	doc, err := goquery.NewDocumentFromReader(p)
+	if err != nil {
+		log.ErrorF("searching book error:%s\n", err.Error())
+		return nil
+	}
+	if doc == nil {
+		log.Error("doc is nil.")
+		return nil
+	}
 	return b.extractSearchResult(doc)
 
 }

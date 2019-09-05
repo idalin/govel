@@ -4,17 +4,22 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 
 	"github.com/idalin/govel/utils"
 )
 
+var (
+	getChapterTried int = 0
+)
+
 type Chapter struct {
 	BookSourceSite string      `json:"source"`
 	BookSourceInst *BookSource `json:"-"`
-	Content        string      `json:"content"`
-	ChapterTitle   string      `json:"chapter_title"`
+	Content        string      `json:"-"`
+	ChapterTitle   string      `json:"title"`
 	Read           bool        `json:"is_read"`
 	ChapterURL     string      `json:"url"`
 	Index          int         `json:"index"`
@@ -90,9 +95,18 @@ func (c *Chapter) GetContent() string {
 			// re := regexp.MustCompile("(\b)+")
 			// content = re.ReplaceAllString(content, "\n    ")
 			c.Content = content
+			getChapterTried = 0
+			return c.Content
 		}
 	} else {
-		log.DebugF("get content error:%s\n", err.Error())
+		if getChapterTried < 5 {
+			getChapterTried++
+			time.Sleep(time.Duration(1) * time.Second)
+			return c.GetContent()
+		} else {
+			getChapterTried = 0
+		}
+		log.DebugF("get content error:%s,retry %d.\n", err.Error(), getChapterTried)
 	}
 	return c.Content
 }

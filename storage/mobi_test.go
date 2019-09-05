@@ -33,7 +33,8 @@ func init() {
 
 func TestMobiStorage(t *testing.T) {
 	book := models.Book{}
-	book.FromURL("https://www.zwdu.com/book/39025/")
+	// book.FromURL("https://www.zwdu.com/book/39025/")
+	book.FromURL("https://www.zwdu.com/book/41228/")
 	// fmt.Println(book.GetChapterList())
 	err := m.SaveBook(&book)
 	if err != nil {

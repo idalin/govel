@@ -9,3 +9,4 @@ bs.json
 bs_test.json
 54good.json
 storage/cache/*
+gui/BookCache/*

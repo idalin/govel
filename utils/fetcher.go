@@ -3,6 +3,8 @@ package utils
 import (
 	"bufio"
 	"crypto/tls"
+	"errors"
+	"fmt"
 	"io"
 	// "log"
 	"net/http"
@@ -37,6 +39,9 @@ func GetPage(url, ua string) (io.Reader, error) {
 	if err != nil {
 		log.DebugF("GetPage error:%s\n", err.Error())
 		return nil, err
+	}
+	if resp.StatusCode != 200 {
+		return nil, errors.New(fmt.Sprintf("error code:%d is not 200.", resp.StatusCode))
 	}
 
 	// defer resp.Body.Close()

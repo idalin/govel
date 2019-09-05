@@ -33,6 +33,13 @@ func (f *FileStorage) SaveBook(book *models.Book) error {
 		}
 	}
 
+	if len(book.GetChapterList()) > 0 {
+		for _, c := range book.GetChapterList() {
+			// fmt.Printf("saving chapter %s\n", c)
+			f.SaveChapter(book, c)
+		}
+	}
+
 	bookInfoFile, err := f.GetBookInfoFile(book)
 	if err != nil {
 		return err
@@ -43,12 +50,6 @@ func (f *FileStorage) SaveBook(book *models.Book) error {
 		return err
 	}
 
-	if len(book.GetChapterList()) > 0 {
-		for _, c := range book.GetChapterList() {
-			// fmt.Printf("saving chapter %s\n", c)
-			f.SaveChapter(book, c)
-		}
-	}
 	return nil
 }
 
@@ -123,15 +124,15 @@ func (f *FileStorage) GetBookInfoFile(book *models.Book) (string, error) {
 }
 
 func (f *FileStorage) SaveChapter(book *models.Book, chapter *models.Chapter) error {
-	log.DebugF("saving chapter %v.", chapter)
+	// log.DebugF("saving chapter %v.", chapter)
 	chapterFileName := f.GetChapterFile(book, chapter)
 	if utils.IsExist(chapterFileName) {
 		return errors.New("file exists,pass.")
 	}
 	content := chapter.GetContent()
-	re := regexp.MustCompile("(\n)+")
-	content = re.ReplaceAllString(content, "\n　　")
-	content = fmt.Sprintf("%s\n\n%s", chapter.GetTitle(), content)
+	// re := regexp.MustCompile("(\n)+")
+	// content = re.ReplaceAllString(content, "\n　　")
+	content = fmt.Sprintf("%s\n\n　　%s", chapter.GetTitle(), content)
 	err := ioutil.WriteFile(chapterFileName, []byte(content), 0644)
 	return err
 }

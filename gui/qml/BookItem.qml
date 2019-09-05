@@ -118,20 +118,12 @@ Rectangle{
         id:bookPopup
         width: root.width/4*3
         height: root.height/1.5
-        // anchors.centerIn: Overlay.overlay
         x: Math.round((parent.width - width) / 2)
-        // y: 0
-        // z: 100
-        // Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-        // x:(root.width-width)/2
-        // y:0
+
         modal: true
         focus: true
         closePolicy: Popup.CloseOnPressOutside
 
-        // BookIntro{
-        //     bookData: searchResult.currentItem
-        // }
     }
    
 }

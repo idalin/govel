@@ -24,7 +24,7 @@ type Book struct {
 	CoverURL         string            `json:"coverUrl"`
 	Kind             string            `json:"kind"`
 	LastChapter      string            `json:"lastChapter"`
-	FinalRefreshData UnixTime          `json:"finalRefreshData"`
+	FinalRefreshDate UnixTime          `json:"finalRefreshData"` // typo here
 	NoteURL          string            `json:"noteUrl"`
 	Introduce        string            `json:"introduce"`
 	ChapterList      []*Chapter        `json:"-"`
@@ -70,6 +70,7 @@ func (b *Book) FromURL(bookURL string) error {
 	b.Tag = utils.GetHostByURL(b.NoteURL)
 	b.GetAuthor()
 	b.GetIntroduce()
+	b.GetName()
 	return nil
 }
 

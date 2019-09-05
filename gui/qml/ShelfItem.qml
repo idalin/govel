@@ -44,8 +44,8 @@ Rectangle{
         
         Column {                                  
             // leftPadding: height/10  
-            padding:height/10
-            spacing: height/15     
+            // padding:height/10
+            // spacing: height/15     
             width: parent.width-coverImgItem.width-badge.width    
             Text{
                 id: titleText
@@ -62,25 +62,16 @@ Rectangle{
                 id: durChapterName              
                 text: book.durChapterName
             }
-            // TextMetrics {
-            //     id: introTextMetrics
-            //     // width: parent.width
-            //     // font.family: "Arial"
-            //     elide: Text.ElideRight
-            //     elideWidth: parent.width*2
-            //     text: "介绍"
-            // }
+
             Text{
                 id: lastChapter
-                // width:parent.width
-                // wrapMode: Text.WordWrap
                 text: book.lastChapterName
             }
-            Text{
-                id: bookSourceText
-                wrapMode: Text.WordWrap
-                text: book.bookInfoBean.origin
-            }
+            // Text{
+            //     id: bookSourceText
+            //     wrapMode: Text.WordWrap
+            //     text: book.bookInfoBean.origin
+            // }
         }
         
         Item{

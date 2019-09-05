@@ -3,17 +3,19 @@ package storage
 import (
 	"errors"
 	"fmt"
+	"os"
 	"path/filepath"
-	"regexp"
+	"strings"
 
-	"github.com/766b/mobi"
+	// "github.com/766b/mobi"
+	"github.com/peterbn/mobi"
 
 	"github.com/idalin/govel/models"
 	"github.com/idalin/govel/utils"
 )
 
 type MobiStorage struct {
-	M        *mobi.MobiWriter
+	M        mobi.Builder
 	BasePath string
 }
 
@@ -26,10 +28,11 @@ func (m *MobiStorage) SaveBook(book *models.Book) error {
 		return errors.New(fmt.Sprintf("file %s exists.", fileName))
 	}
 	if m.M == nil {
-		m.M, err = mobi.NewWriter(fileName)
-		if err != nil {
-			return err
-		}
+
+		m.M = mobi.NewBuilder()
+		// if err != nil {
+		// 	return err
+		// }
 	}
 
 	m.M.Title(book.GetName())
@@ -41,13 +44,19 @@ func (m *MobiStorage) SaveBook(book *models.Book) error {
 	if book.GetAuthor() != "" {
 		m.M.NewExthRecord(mobi.EXTH_AUTHOR, book.GetAuthor())
 	}
+	m.M.CSS("p{ text-indent:2em; padding:0px; margin:0px; }")
 	if len(book.GetChapterList()) > 0 {
 		for _, c := range book.GetChapterList() {
 			m.SaveChapter(book, c)
 		}
 	}
-	m.M.Write()
-	return nil
+	// m.M.Write()
+	f, err := os.Create(fileName)
+	if err != nil {
+		return err
+	}
+	_, err = m.M.WriteTo(f)
+	return err
 }
 
 func (m *MobiStorage) GetBookFile(book *models.Book) (string, error) {
@@ -70,9 +79,13 @@ func (m *MobiStorage) SaveChapter(book *models.Book, chapter *models.Chapter) er
 		return errors.New("Mobi builder not found.")
 	}
 	content := chapter.GetContent()
-	re := regexp.MustCompile("(\n)+")
-	content = re.ReplaceAllString(content, "\n　　")
-	content = fmt.Sprintf("%s\n\n%s", chapter.GetTitle(), content)
+	// re := regexp.MustCompile("(\n)+")
+	// content = re.ReplaceAllString(content, "\n　　")
+	s := strings.Split(content, "\n")
+	for i, v := range s {
+		s[i] = fmt.Sprintf("<p>%s</p>", strings.TrimSpace(v))
+	}
+	content = strings.Join(s, "")
 	m.M.NewChapter(chapter.GetTitle(), []byte(content))
 	return nil
 }

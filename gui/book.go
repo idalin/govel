@@ -30,7 +30,7 @@ type Book struct {
 	_ string          `property:"noteUrl"`
 	_ string          `property:"coverUrl"`
 	_ string          `property:"chapterUrl"`
-	_ models.UnixTime `property:"finalRefreshData"`
+	_ models.UnixTime `property:"finalRefreshDate"`
 	_ string          `property:"tag"`
 	_ string          `property:"origin"`
 	_ string          `property:"kind"`
@@ -178,7 +178,7 @@ func (a *AbstractBookListModel) add(item *models.Book) {
 	book.SetCoverUrl(item.CoverURL)
 	book.SetKind(item.Kind)
 	book.SetChapterUrl(item.ChapterURL)
-	book.SetFinalRefreshData(item.FinalRefreshData)
+	book.SetFinalRefreshDate(item.FinalRefreshDate)
 	book.SetOrigin(item.Origin)
 	book.SetLastChapter(item.LastChapter)
 	book.SetIntroduce(item.Introduce)

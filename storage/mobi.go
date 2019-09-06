@@ -36,7 +36,7 @@ func (m *MobiStorage) SaveBook(book *models.Book) error {
 	}
 
 	m.M.Title(book.GetName())
-	m.M.Compression(mobi.CompressionNone)
+	m.M.Compression(mobi.CompressionPalmDoc)
 	m.M.NewExthRecord(mobi.EXTH_DOCTYPE, "EBOK")
 	if book.CoverURL != "" {
 		m.M.AddCover(book.CoverURL, book.CoverURL)
@@ -52,6 +52,7 @@ func (m *MobiStorage) SaveBook(book *models.Book) error {
 	}
 	// m.M.Write()
 	f, err := os.Create(fileName)
+	defer f.Close()
 	if err != nil {
 		return err
 	}

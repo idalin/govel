@@ -112,7 +112,9 @@ func ParseRules(doc interface{}, rule string) (*goquery.Selection, string) {
 				index += sel.Length()
 				// fmt.Printf("index = %d\n", index)
 			}
-			nodes = append(nodes, sel.Nodes[index])
+			if index < len(sel.Nodes) { // 有时候规则写的不是很准确，排除的节点序号超过实际可用的节点数，会引发越界异常
+				nodes = append(nodes, sel.Nodes[index])
+			}
 		}
 		sel.Nodes = RemoveNodes(sel.Nodes, nodes)
 		// fmt.Printf("total %d after removed.\n", sel.Length())

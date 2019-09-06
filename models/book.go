@@ -216,3 +216,18 @@ func (b *Book) GetAuthor() string {
 	}
 	return b.Author
 }
+
+func (b *Book) GetCoverURL() string {
+	if b.CoverURL == "" {
+		doc, err := b.getBookPage()
+		if err == nil {
+			_, cover := utils.ParseRules(doc, b.BookSourceInst.RuleCoverURL)
+			if cover != "" {
+				b.CoverURL = cover
+			}
+		} else {
+			log.DebugF("get cover error:%s\n", err.Error())
+		}
+	}
+	return b.CoverURL
+}

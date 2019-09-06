@@ -77,7 +77,7 @@ func ParseRules(doc interface{}, rule string) (*goquery.Selection, string) {
 
 				if err == nil {
 					s := strings.Split(text, "\n\n")
-					log.DebugF("line 1 is :===%s===\n", s[1])
+					// log.DebugF("line 1 is :===%s===\n", s[1])  //这个debug信息有可能导致数组越界。
 					for i, v := range s {
 						s[i] = fmt.Sprintf("　　%s", strings.TrimSpace(v))
 					}

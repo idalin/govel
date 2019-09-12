@@ -3,6 +3,8 @@ package models
 import (
 	"errors"
 	"fmt"
+	"io"
+	"net/http"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -230,4 +232,21 @@ func (b *Book) GetCoverURL() string {
 		}
 	}
 	return b.CoverURL
+}
+
+func (b *Book) DownloadCover(coverPath string) error {
+	if b.GetCoverURL() != "" {
+		res, err := http.Get(b.GetCoverURL())
+		if err != nil {
+			return err
+		}
+		f, err := os.Create(coverPath)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+		io.Copy(f, res.Body)
+		return nil
+	}
+	return errors.New("No cover found.")
 }

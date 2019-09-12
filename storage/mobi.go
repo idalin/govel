@@ -38,8 +38,15 @@ func (m *MobiStorage) SaveBook(book *models.Book) error {
 	m.M.Title(book.GetName())
 	m.M.Compression(mobi.CompressionPalmDoc)
 	m.M.NewExthRecord(mobi.EXTH_DOCTYPE, "EBOK")
-	if book.CoverURL != "" {
-		m.M.AddCover(book.CoverURL, book.CoverURL)
+	if book.GetCoverURL() != "" {
+		coverPath := filepath.Join(m.BasePath, fmt.Sprintf("%s.jpg", book.GetName()))
+		err := book.DownloadCover(coverPath)
+		if err == nil {
+			m.M.AddCover(coverPath, coverPath)
+		} else {
+			log.DebugF("download cover error: %s\n", err.Error())
+		}
+
 	}
 	if book.GetAuthor() != "" {
 		m.M.NewExthRecord(mobi.EXTH_AUTHOR, book.GetAuthor())

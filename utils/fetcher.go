@@ -21,7 +21,7 @@ func GetPage(url, ua string) (io.Reader, error) {
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
-	client := &http.Client{Transport: tr, Timeout: 10 * time.Second}
+	client := &http.Client{Transport: tr, Timeout: 5 * time.Second}
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -49,13 +49,31 @@ func GetPage(url, ua string) (io.Reader, error) {
 	return DecodeHTMLBody(resp.Body)
 }
 
-func PostPage(url, key string) (io.Reader, error) {
-	res, err := http.Post(url, "application/x-www-form-urlencoded", strings.NewReader(key))
+func PostPage(url, key, ua string) (io.Reader, error) {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr, Timeout: 5 * time.Second}
+
+	req, err := http.NewRequest("POST", url, strings.NewReader(key))
+	if err != nil {
+		log.DebugF("GetPage error:%s\n", err.Error())
+		return nil, err
+
+	}
+	if ua == "" {
+		ua = UserAgent
+	}
+	req.Header.Set("User-Agent", ua)
+
+	resp, err := client.Do(req)
+
+	// resp, err := http.Post(url, "application/x-www-form-urlencoded", strings.NewReader(key))
 	if err != nil {
 		log.DebugF("PostPage error:%s\n", err.Error())
 		return nil, err
 	}
-	return DecodeHTMLBody(res.Body)
+	return DecodeHTMLBody(resp.Body)
 }
 
 func detectContentCharset(body io.Reader) (string, io.Reader) {

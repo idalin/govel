@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"time"
 	// "log"
 	"net/url"
 	"sort"
@@ -158,7 +159,7 @@ func (b *BookSource) SearchBook(title string) []*Book {
 	if b.searchMethod() == "post" {
 		data := strings.Split(searchUrl, "@")[1]
 		params := strings.Replace(data, "=searchKey", fmt.Sprintf("=%s", url.QueryEscape(title)), -1)
-		p, err = utils.PostPage(strings.Split(searchUrl, "@")[0], params)
+		p, err = utils.PostPage(strings.Split(searchUrl, "@")[0], params, b.HTTPUserAgent)
 	} else {
 		log.Debug(searchUrl)
 		p, err = utils.GetPage(searchUrl, b.HTTPUserAgent)
@@ -228,6 +229,7 @@ func (b *BookSource) extractSearchResult(doc *goquery.Document) []*Book {
 					CoverURL:    cover,
 					LastChapter: lastChapter,
 					NoteURL:     noteURL,
+					Origin:      b.BookSourceName,
 				}
 				srList = append(srList, sr)
 
@@ -242,10 +244,12 @@ func (b *BookSource) extractSearchResult(doc *goquery.Document) []*Book {
 }
 
 func SearchBooks(title string) SearchOutput {
-	c := make(chan *Book, 10)
+	c := make(chan *Book, 5)
+	defer close(c)
 	result := make(SearchOutput)
-	go func() {
-		for i, _ := range BSCache.Items() {
+
+	for i, _ := range BSCache.Items() {
+		go func(i string) {
 			if b, ok := BSCache.Get(i); ok {
 				bs, ok := b.(BookSource)
 				if ok {
@@ -259,19 +263,28 @@ func SearchBooks(title string) SearchOutput {
 					log.ErrorF("not book source.")
 				}
 			}
-		}
-		close(c)
-	}()
+		}(i)
+	}
 
-	for i := range c {
-		if _, ok := result[i.Name]; !ok {
-			result[i.Name] = []*Book{i}
-			// result[title] = append(result[title], sr)
-		} else {
-			// fmt.Println("exists, append.")
-			result[i.Name] = append(result[i.Name], i)
+	for {
+		select {
+		case i, ok := <-c:
+			if ok {
+				log.DebugF("Got result:%s, %s\n", i, i.Tag)
+				if _, ok := result[i.Name]; !ok {
+					result[i.Name] = []*Book{i}
+				} else {
+					result[i.Name] = append(result[i.Name], i)
+				}
+			}
+		case <-time.After(5 * time.Second):
+			log.DebugF("Timeout,exiting...\n")
+			goto end
 		}
 	}
+end:
+	log.DebugF("exited!\n")
+
 	for _, key := range SortSearchOutput(result) {
 		if key != "" {
 			resultJson, _ := json.MarshalIndent(result[key], "", "    ")

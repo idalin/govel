@@ -16,6 +16,7 @@ func ParseRules(doc interface{}, rule string) (*goquery.Selection, string) {
 	// log.Debugf("parsing rules:%s\n", rule)
 	var sel *goquery.Selection
 	var result string
+	var tmpRule = make([]string, 0)
 	var exclude = make([]string, 0)
 
 	if strings.HasPrefix(rule, "@JSon") {
@@ -44,40 +45,35 @@ func ParseRules(doc interface{}, rule string) (*goquery.Selection, string) {
 				sel = document.Find(ruleStr)
 			} else {
 				sel, _ = doc.(*goquery.Selection)
+
 				sel = sel.Find(ruleStr)
 			}
+
 			if length == 3 {
 				sel = sel.Eq(index)
 			}
 
 		case len(rules) - 1:
+			if strings.Contains(ruleStr, "#") {
+				tmpRule = strings.Split(ruleStr, "#")
+				ruleStr = tmpRule[0]
+			}
 			switch ruleStr {
 			case "text":
-				// result = sel.Text()
 				var s []string
-				// log.DebugF("length of sel:%d\n", len(sel.Nodes))
 				for _, n := range sel.Nodes {
 					s = append(s, Nodetext(n))
 				}
 				result = strings.Join(s, "　　\n")
-				// result = fmt.Sprintf("  %s", result)
-				// result, _ = sel.Html()
-				// log.Debug(result)
-				// text, err := html2text.FromString(result, html2text.Options{PrettyTables: false})
-				// if err == nil {
-				// 	result = text
-				// }
 			case "html":
 				result, _ = sel.Html()
 			case "textNodes":
 				result, _ = sel.Html()
 				log.DebugF("length of sel:%d\n length of children:%d\n", len(sel.Nodes), len(sel.Children().Nodes))
 				text, err := html2text.FromString(result, html2text.Options{PrettyTables: false})
-				// var s []string
 
 				if err == nil {
 					s := strings.Split(text, "\n\n")
-					// log.DebugF("line 1 is :===%s===\n", s[1])  //这个debug信息有可能导致数组越界。
 					for i, v := range s {
 						s[i] = fmt.Sprintf("　　%s", strings.TrimSpace(v))
 					}
@@ -86,14 +82,19 @@ func ParseRules(doc interface{}, rule string) (*goquery.Selection, string) {
 
 			case "src", "href":
 				result, _ = sel.Attr(ruleStr)
+			case "a":
+				break
 			default:
 				sel = sel.Find(ruleStr)
 			}
 			if result != "" {
+				if len(tmpRule) >= 2 {
+					result = strings.Replace(result, tmpRule[1], "", 0)
+				}
 				return nil, strings.TrimSpace(result)
-				// return nil, result
 			}
 		default:
+
 			sel = sel.Find(ruleStr)
 			if length == 3 {
 				sel = sel.Eq(index)
@@ -110,14 +111,12 @@ func ParseRules(doc interface{}, rule string) (*goquery.Selection, string) {
 			}
 			if index < 0 { // !是排除,有些位置不符合需要排除用!,后面的序号用:隔开0是第1个,负数为倒数序号,-1最后一个,-2倒数第2个,依次
 				index += sel.Length()
-				// fmt.Printf("index = %d\n", index)
 			}
 			if index < len(sel.Nodes) { // 有时候规则写的不是很准确，排除的节点序号超过实际可用的节点数，会引发越界异常
 				nodes = append(nodes, sel.Nodes[index])
 			}
 		}
 		sel.Nodes = RemoveNodes(sel.Nodes, nodes)
-		// fmt.Printf("total %d after removed.\n", sel.Length())
 	}
 	return sel, ""
 }

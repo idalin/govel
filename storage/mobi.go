@@ -30,9 +30,7 @@ func (m *MobiStorage) SaveBook(book *models.Book) error {
 	if m.M == nil {
 
 		m.M = mobi.NewBuilder()
-		// if err != nil {
-		// 	return err
-		// }
+
 	}
 
 	m.M.Title(book.GetName())
@@ -57,7 +55,6 @@ func (m *MobiStorage) SaveBook(book *models.Book) error {
 			m.SaveChapter(book, c)
 		}
 	}
-	// m.M.Write()
 	f, err := os.Create(fileName)
 	defer f.Close()
 	if err != nil {
@@ -87,8 +84,6 @@ func (m *MobiStorage) SaveChapter(book *models.Book, chapter *models.Chapter) er
 		return errors.New("Mobi builder not found.")
 	}
 	content := chapter.GetContent()
-	// re := regexp.MustCompile("(\n)+")
-	// content = re.ReplaceAllString(content, "\n　　")
 	s := strings.Split(content, "\n")
 	for i, v := range s {
 		s[i] = fmt.Sprintf("<p>%s</p>", strings.TrimSpace(v))

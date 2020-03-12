@@ -71,11 +71,9 @@ func ParseRules(doc interface{}, rule string) (*goquery.Selection, string) {
 				result, _ = sel.Html()
 				log.DebugF("length of sel:%d\n length of children:%d\n", len(sel.Nodes), len(sel.Children().Nodes))
 				text, err := html2text.FromString(result, html2text.Options{PrettyTables: false})
-				// var s []string
 
 				if err == nil {
 					s := strings.Split(text, "\n\n")
-					// log.DebugF("line 1 is :===%s===\n", s[1])  //这个debug信息有可能导致数组越界。
 					for i, v := range s {
 						s[i] = fmt.Sprintf("　　%s", strings.TrimSpace(v))
 					}
@@ -117,14 +115,12 @@ func ParseRules(doc interface{}, rule string) (*goquery.Selection, string) {
 			}
 			if index < 0 { // !是排除,有些位置不符合需要排除用!,后面的序号用:隔开0是第1个,负数为倒数序号,-1最后一个,-2倒数第2个,依次
 				index += sel.Length()
-				// fmt.Printf("index = %d\n", index)
 			}
 			if index < len(sel.Nodes) { // 有时候规则写的不是很准确，排除的节点序号超过实际可用的节点数，会引发越界异常
 				nodes = append(nodes, sel.Nodes[index])
 			}
 		}
 		sel.Nodes = RemoveNodes(sel.Nodes, nodes)
-		// fmt.Printf("total %d after removed.\n", sel.Length())
 	}
 	return sel, ""
 }

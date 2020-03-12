@@ -37,7 +37,11 @@ func TestMobiStorage(t *testing.T) {
 	book := models.Book{}
 	// book.FromURL("https://www.zwdu.com/book/39025/")
 	// book.FromURL("https://www.zwdu.com/book/41228/")
+<<<<<<< HEAD
 	book.FromURL("https://www.booktxt.com/20_20876/")
+=======
+	book.FromURL("http://www.b5200.net/88_88020/")
+>>>>>>> f7b0ab39f032f31a64ab92216b412852618fcf34
 	// fmt.Println(book.GetChapterList())
 	err := m.SaveBook(&book)
 	if err != nil {

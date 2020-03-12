@@ -35,7 +35,6 @@ func (f *FileStorage) SaveBook(book *models.Book) error {
 
 	if len(book.GetChapterList()) > 0 {
 		for _, c := range book.GetChapterList() {
-			// fmt.Printf("saving chapter %s\n", c)
 			f.SaveChapter(book, c)
 		}
 	}
@@ -124,14 +123,11 @@ func (f *FileStorage) GetBookInfoFile(book *models.Book) (string, error) {
 }
 
 func (f *FileStorage) SaveChapter(book *models.Book, chapter *models.Chapter) error {
-	// log.DebugF("saving chapter %v.", chapter)
 	chapterFileName := f.GetChapterFile(book, chapter)
 	if utils.IsExist(chapterFileName) {
 		return errors.New("file exists,pass.")
 	}
 	content := chapter.GetContent()
-	// re := regexp.MustCompile("(\n)+")
-	// content = re.ReplaceAllString(content, "\n　　")
 	content = fmt.Sprintf("%s\n\n　　%s", chapter.GetTitle(), content)
 	err := ioutil.WriteFile(chapterFileName, []byte(content), 0644)
 	return err

@@ -53,15 +53,9 @@ func (c *Chapter) GetBookSource() *BookSource {
 		}
 		c.BookSourceSite = utils.GetHostByURL(c.ChapterURL)
 	}
-	if bsItem, ok := BSCache.Get(c.BookSourceSite); ok {
-		if bs, ok := bsItem.(BookSource); ok {
-			c.BookSourceInst = &bs
-			return &bs
-		} else {
-			return nil
-		}
-	}
-	return nil
+	bs := GetBookSourceByURL(c.BookSourceSite)
+	c.BookSourceInst = bs
+	return bs
 }
 
 func (c *Chapter) getChapterPage() (*goquery.Document, error) {

@@ -16,6 +16,7 @@ func ParseRules(doc interface{}, rule string) (*goquery.Selection, string) {
 	// log.Debugf("parsing rules:%s\n", rule)
 	var sel *goquery.Selection
 	var result string
+	var tmpRule = make([]string, 0)
 	var exclude = make([]string, 0)
 
 	if strings.HasPrefix(rule, "@JSon") {
@@ -44,29 +45,26 @@ func ParseRules(doc interface{}, rule string) (*goquery.Selection, string) {
 				sel = document.Find(ruleStr)
 			} else {
 				sel, _ = doc.(*goquery.Selection)
+
 				sel = sel.Find(ruleStr)
 			}
+
 			if length == 3 {
 				sel = sel.Eq(index)
 			}
 
 		case len(rules) - 1:
+			if strings.Contains(ruleStr, "#") {
+				tmpRule = strings.Split(ruleStr, "#")
+				ruleStr = tmpRule[0]
+			}
 			switch ruleStr {
 			case "text":
-				// result = sel.Text()
 				var s []string
-				// log.DebugF("length of sel:%d\n", len(sel.Nodes))
 				for _, n := range sel.Nodes {
 					s = append(s, Nodetext(n))
 				}
 				result = strings.Join(s, "　　\n")
-				// result = fmt.Sprintf("  %s", result)
-				// result, _ = sel.Html()
-				// log.Debug(result)
-				// text, err := html2text.FromString(result, html2text.Options{PrettyTables: false})
-				// if err == nil {
-				// 	result = text
-				// }
 			case "html":
 				result, _ = sel.Html()
 			case "textNodes":
@@ -86,14 +84,23 @@ func ParseRules(doc interface{}, rule string) (*goquery.Selection, string) {
 
 			case "src", "href":
 				result, _ = sel.Attr(ruleStr)
+			case "a":
+				break
 			default:
+				// tHtml, _ := sel.Html()
+				// log.Debugf("ruleStr is %s.\tsel is: %s.\n", ruleStr, tHtml)
 				sel = sel.Find(ruleStr)
+				// tHtml, _ = sel.Html()
+				// log.Debugf("ruleStr is %s.\tsel is: %s.\n", ruleStr, tHtml)
 			}
 			if result != "" {
+				if len(tmpRule) >= 2 {
+					result = strings.Replace(result, tmpRule[1], "", 0)
+				}
 				return nil, strings.TrimSpace(result)
-				// return nil, result
 			}
 		default:
+
 			sel = sel.Find(ruleStr)
 			if length == 3 {
 				sel = sel.Eq(index)

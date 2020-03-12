@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"testing"
+
 	// "log"
 
 	"github.com/idalin/govel/models"
@@ -12,10 +13,11 @@ import (
 var m = &MobiStorage{}
 
 func init() {
-	m.BasePath = "/home/dalin/go/src/github.com/idalin/govel/storage/cache"
+	// m.BasePath = "/home/dalin/go/src/github.com/idalin/govel/storage/cache"
+	m.BasePath = "./cache"
 	var bs []models.BookSource
 	// bookSource, err := ioutil.ReadFile("54good.json")
-	bookSource, err := ioutil.ReadFile("../bs.json")
+	bookSource, err := ioutil.ReadFile("../bs_ok.json")
 
 	if err != nil {
 		log.Fatal(err.Error())
@@ -35,7 +37,7 @@ func TestMobiStorage(t *testing.T) {
 	book := models.Book{}
 	// book.FromURL("https://www.zwdu.com/book/39025/")
 	// book.FromURL("https://www.zwdu.com/book/41228/")
-	book.FromURL("http://www.b5200.net/96_96421/")
+	book.FromURL("https://www.booktxt.com/20_20876/")
 	// fmt.Println(book.GetChapterList())
 	err := m.SaveBook(&book)
 	if err != nil {

@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"time"
+
 	// "log"
 	"net/url"
 	"sort"
@@ -212,15 +213,18 @@ func (b *BookSource) extractSearchResult(doc *goquery.Document) []*Book {
 				_, cover := utils.ParseRules(s, b.RuleSearchCoverURL)
 				_, lastChapter := utils.ParseRules(s, b.RuleSearchLastChapter)
 				_, noteURL := utils.ParseRules(s, b.RuleSearchNoteURL)
-				if strings.HasPrefix(url, "/") {
-					url = fmt.Sprintf("%s%s", b.BookSourceURL, url)
-				}
-				if strings.HasPrefix(cover, "/") {
-					cover = fmt.Sprintf("%s%s", b.BookSourceURL, cover)
-				}
-				if strings.HasPrefix(noteURL, "/") {
-					noteURL = fmt.Sprintf("%s%s", b.BookSourceURL, noteURL)
-				}
+				url = utils.URLFix(url, b.BookSourceURL)
+				// if strings.HasPrefix(url, "/") {
+				// 	url = fmt.Sprintf("%s%s", b.BookSourceURL, url)
+				// }
+				cover = utils.URLFix(cover, b.BookSourceURL)
+				// if strings.HasPrefix(cover, "/") {
+				// 	cover = fmt.Sprintf("%s%s", b.BookSourceURL, cover)
+				// }
+				noteURL = utils.URLFix(noteURL, b.BookSourceURL)
+				// if strings.HasPrefix(noteURL, "/") {
+				// 	noteURL = fmt.Sprintf("%s%s", b.BookSourceURL, noteURL)
+				// }
 				sr := &Book{
 					Tag:         b.BookSourceURL,
 					Name:        title,
@@ -241,6 +245,37 @@ func (b *BookSource) extractSearchResult(doc *goquery.Document) []*Book {
 	}
 
 	return srList
+}
+
+func GetBookSourceByURL(url string) *BookSource {
+	if url == "" {
+		return nil
+	}
+	host := utils.GetHostByURL(url)
+	schema := strings.Split(host, ":")[0]
+	hostname := strings.Split(host, ":")[1]
+	if bsItem, ok := BSCache.Get(host); ok {
+		if bs, ok := bsItem.(BookSource); ok {
+			return &bs
+		} else {
+			return nil
+		}
+	} else {
+		alterHost := ""
+		if strings.ToLower(schema) == "http" {
+			alterHost = fmt.Sprintf("https:%s", hostname)
+		} else {
+			alterHost = fmt.Sprintf("http:%s", hostname)
+		}
+		if bsItem, ok := BSCache.Get(alterHost); ok {
+			if bs, ok := bsItem.(BookSource); ok {
+				return &bs
+			} else {
+				return nil
+			}
+		}
+	}
+	return nil
 }
 
 func SearchBooks(title string) SearchOutput {

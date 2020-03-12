@@ -8,7 +8,6 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 
@@ -29,7 +28,7 @@ type Book struct {
 	FinalRefreshDate UnixTime          `json:"finalRefreshData"` // typo here
 	NoteURL          string            `json:"noteUrl"`
 	Introduce        string            `json:"introduce"`
-	ChapterList      []*Chapter        `json:"-"`
+	ChapterList      []*Chapter        `json:"chapterList"`
 	BookSourceInst   *BookSource       `json:"-"`
 	Page             *goquery.Document `json:"-"`
 }
@@ -48,16 +47,10 @@ func (b *Book) GetBookSource() *BookSource {
 		}
 		b.Tag = utils.GetHostByURL(b.NoteURL)
 	}
-	if bsItem, ok := BSCache.Get(b.Tag); ok {
-		if bs, ok := bsItem.(BookSource); ok {
-			b.BookSourceInst = &bs
-			b.Origin = bs.BookSourceName
-			return &bs
-		} else {
-			return nil
-		}
-	}
-	return nil
+	bs := GetBookSourceByURL(b.Tag)
+	b.BookSourceInst = bs
+	b.Origin = bs.BookSourceName
+	return bs
 }
 
 func (b *Book) FromURL(bookURL string) error {
@@ -76,6 +69,7 @@ func (b *Book) FromURL(bookURL string) error {
 	return nil
 }
 
+// TODO not finished yet
 func (b *Book) FromCache(bookPath string) error {
 	if _, err := os.Stat(bookPath); os.IsNotExist(err) {
 		return errors.New(fmt.Sprintf("book path: %s not exists.", bookPath))
@@ -112,6 +106,7 @@ func (b *Book) GetChapterURL() string {
 	if err == nil {
 		_, chapterURL := utils.ParseRules(doc, b.BookSourceInst.RuleChapterURL)
 		if chapterURL != "" {
+			chapterURL = utils.URLFix(chapterURL, b.Tag)
 			log.DebugF("chapter url is: %s", chapterURL)
 			b.ChapterURL = chapterURL
 			return b.ChapterURL
@@ -157,9 +152,8 @@ func (b *Book) UpdateChapterList(startFrom int) error {
 			}
 			_, name := utils.ParseRules(s, b.BookSourceInst.RuleChapterName)
 			_, url := utils.ParseRules(s, b.BookSourceInst.RuleContentURL)
-			if strings.HasPrefix(url, "/") {
-				url = fmt.Sprintf("%s%s", b.BookSourceInst.BookSourceURL, url)
-			}
+			url = utils.URLFix(url, b.Tag)
+			// log.DebugF("chapter url is:%s\n", url)
 			b.ChapterList = append(b.ChapterList, &Chapter{
 				ChapterTitle: name,
 				ChapterURL:   url,
@@ -225,6 +219,7 @@ func (b *Book) GetCoverURL() string {
 		if err == nil {
 			_, cover := utils.ParseRules(doc, b.BookSourceInst.RuleCoverURL)
 			if cover != "" {
+				cover = utils.URLFix(cover, b.Tag)
 				b.CoverURL = cover
 			}
 		} else {
@@ -232,6 +227,13 @@ func (b *Book) GetCoverURL() string {
 		}
 	}
 	return b.CoverURL
+}
+func (b *Book) GetOrigin() string {
+	if b.Origin != "" {
+		return b.Origin
+	}
+	b.Origin = b.GetBookSource().BookSourceName
+	return b.Origin
 }
 
 func (b *Book) DownloadCover(coverPath string) error {

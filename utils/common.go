@@ -28,3 +28,15 @@ func IsExist(fileName string) bool {
 	}
 	return false
 }
+
+func URLFix(uri, host string) string {
+	if strings.HasPrefix(uri, "/") {
+		if !strings.HasPrefix(uri, "//") {
+			return fmt.Sprintf("%s%s", host, uri)
+		} else {
+			return fmt.Sprintf("%s:%s", strings.Split(host, ":")[0], uri)
+		}
+
+	}
+	return uri
+}

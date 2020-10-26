@@ -16,14 +16,14 @@ var (
 )
 
 type Chapter struct {
-	BookSourceSite string      `json:"source"`
-	BookSourceInst *BookSource `json:"-"`
-	Content        string      `json:"-"`
-	ChapterTitle   string      `json:"title"`
-	Read           bool        `json:"is_read"`
-	ChapterURL     string      `json:"url"`
-	Index          int         `json:"index"`
-	BelongToBook   *Book
+	BookSourceSite string            `json:"source"`
+	BookSourceInst *BookSource       `json:"-"`
+	Content        string            `json:"content"`
+	ChapterTitle   string            `json:"title"`
+	Read           bool              `json:"is_read"`
+	ChapterURL     string            `json:"url"`
+	Index          int               `json:"index"`
+	BelongToBook   *Book             `json:"-"`
 	Page           *goquery.Document `json:"-"`
 }
 

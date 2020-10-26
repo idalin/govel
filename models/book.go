@@ -117,15 +117,17 @@ func (b *Book) GetChapterURL() string {
 	return b.NoteURL
 }
 
-func (b *Book) GetChapterList() []*Chapter {
+func (b *Book) GetChapterList(offset, limit int) []*Chapter {
+	fmt.Printf("chapterList length:%d\n", len(b.ChapterList))
 	b.UpdateChapterList(len(b.ChapterList))
-	return b.ChapterList
+	return b.ChapterList[offset : offset+limit]
 }
 
 func (b *Book) UpdateChapterList(startFrom int) error {
 	var doc *goquery.Document
 	var err error
 	bs := b.GetBookSource()
+	// if b.ChapterURL != "" && bs != nil {
 	p, err := utils.GetPage(b.GetChapterURL(), b.GetBookSource().HTTPUserAgent)
 	log.DebugF("%s chapterlist url is:%s .", b.Name, b.ChapterURL)
 	if err != nil {

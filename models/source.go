@@ -36,7 +36,7 @@ func InitBS(fileName string) {
 	bookSource, err := ioutil.ReadFile(fileName)
 
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatal(fmt.Sprintf("%s:%s", err.Error(), fileName))
 	}
 	err = json.Unmarshal(bookSource, &bs)
 	if err != nil {
@@ -50,7 +50,9 @@ func InitBS(fileName string) {
 
 func SortSearchOutput(so SearchOutput) []string {
 	sortedResult := make(map[string]int, len(so))
+	// var keys = make([]int, len(so))
 	var newKeys = make([]string, len(so))
+	// var result = &SearchOutput{}
 	for k, v := range so {
 		sortedResult[k] = len(v)
 	}
@@ -66,6 +68,7 @@ func SortSearchOutput(so SearchOutput) []string {
 		return ss[i].Value > ss[j].Value
 	})
 	for _, kv := range ss {
+		// fmt.Printf("%s, %d\n", kv.Key, kv.Value)
 		newKeys = append(newKeys, kv.Key)
 	}
 	return newKeys
@@ -211,10 +214,17 @@ func (b *BookSource) extractSearchResult(doc *goquery.Document) []*Book {
 				_, lastChapter := utils.ParseRules(s, b.RuleSearchLastChapter)
 				_, noteURL := utils.ParseRules(s, b.RuleSearchNoteURL)
 				url = utils.URLFix(url, b.BookSourceURL)
+				// if strings.HasPrefix(url, "/") {
+				// 	url = fmt.Sprintf("%s%s", b.BookSourceURL, url)
+				// }
 				cover = utils.URLFix(cover, b.BookSourceURL)
-
+				// if strings.HasPrefix(cover, "/") {
+				// 	cover = fmt.Sprintf("%s%s", b.BookSourceURL, cover)
+				// }
 				noteURL = utils.URLFix(noteURL, b.BookSourceURL)
-
+				// if strings.HasPrefix(noteURL, "/") {
+				// 	noteURL = fmt.Sprintf("%s%s", b.BookSourceURL, noteURL)
+				// }
 				sr := &Book{
 					Tag:         b.BookSourceURL,
 					Name:        title,

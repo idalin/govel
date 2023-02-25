@@ -15,7 +15,7 @@ require (
 	github.com/spf13/viper v1.4.0
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
 	github.com/therecipe/qt v0.0.0-20190904000911-d6c64b2b9081
-	golang.org/x/net v0.0.0-20190909003024-a7b16738d86b
-	golang.org/x/text v0.3.2
+	golang.org/x/net v0.0.0-20220722155237-a158d28d115b
+	golang.org/x/text v0.3.8
 	jaytaylor.com/html2text v0.0.0-20190408195923-01ec452cbe43
 )

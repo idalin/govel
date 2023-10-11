@@ -16,8 +16,8 @@ require (
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
 	github.com/therecipe/qt v0.0.0-20190904000911-d6c64b2b9081
 	github.com/ugorji/go v1.1.7 // indirect
-	golang.org/x/net v0.10.0
-	golang.org/x/text v0.9.0
+	golang.org/x/net v0.17.0
+	golang.org/x/text v0.13.0
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 	jaytaylor.com/html2text v0.0.0-20190408195923-01ec452cbe43
 )
